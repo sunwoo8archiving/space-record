@@ -1,10 +1,10 @@
 [
-  {
-    "id": "001",
-    "title": "Untitled",
-    "year": "2026",
-    "medium": "",
-    "image": "images/placeholder.svg",
-    "description": ""
-  }
+  { "id": "001", "title": "Untitled 01", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
+  { "id": "002", "title": "Untitled 02", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
+  { "id": "003", "title": "Untitled 03", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
+  { "id": "004", "title": "Untitled 04", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
+  { "id": "005", "title": "Untitled 05", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
+  { "id": "006", "title": "Untitled 06", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
+  { "id": "007", "title": "Untitled 07", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
+  { "id": "008", "title": "Untitled 08", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" }
 ]

@@ -8,25 +8,29 @@
 </head>
 <body>
   <header class="site-header">
-    <h1 class="site-title">Dongbuk</h1>
+    <button class="site-title" data-view="gallery" type="button">Dongbuk</button>
     <nav class="site-nav">
-      <a href="#gallery">Works</a>
-      <a href="#about">About</a>
+      <button data-view="info" type="button">Info</button>
+      <button data-view="index" type="button">Index</button>
     </nav>
   </header>
 
   <main>
-    <section id="gallery" class="gallery"></section>
+    <section id="view-gallery" class="view view-gallery">
+      <div class="drag-stage" id="drag-stage">
+        <img id="gallery-image" src="" alt="" draggable="false">
+      </div>
+      <div class="counter" id="counter"></div>
+    </section>
 
-    <section id="about" class="about">
-      <h2>About</h2>
+    <section id="view-index" class="view view-index" hidden>
+      <div class="index-grid" id="index-grid"></div>
+    </section>
+
+    <section id="view-info" class="view view-info" hidden>
       <p>Dongbuk 프로젝트 소개 텍스트를 여기에 작성하세요.</p>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <p>&copy; 2026 Dongbuk</p>
-  </footer>
 
   <script src="js/main.js"></script>
 </body>
