@@ -209,6 +209,8 @@ main {
 @media (max-width: 720px) {
   .modal {
     grid-template-columns: 1fr;
+    grid-auto-rows: max-content;
+    align-items: start;
     height: 100%;
     overflow-y: auto;
   }
