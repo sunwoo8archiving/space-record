@@ -11,6 +11,12 @@ const views = {
   info: document.getElementById("view-info"),
 };
 
+const modalOverlay = document.getElementById("modal-overlay");
+const modalClose = document.getElementById("modal-close");
+const modalImage1 = document.getElementById("modal-image-1");
+const modalImage2 = document.getElementById("modal-image-2");
+const modalText = document.getElementById("modal-text");
+
 function pad(n) {
   return String(n).padStart(2, "0");
 }
@@ -54,10 +60,38 @@ function renderIndexGrid() {
   });
 }
 
+function openModal(index) {
+  const work = works[index];
+  if (!work) return;
+  const [img1, img2] =
+    work.detailImages && work.detailImages.length ? work.detailImages : [work.image, work.image];
+  modalImage1.src = img1;
+  modalImage1.alt = work.title;
+  modalImage2.src = img2;
+  modalImage2.alt = work.title;
+  modalText.textContent = work.text || work.description || "";
+  modalOverlay.hidden = false;
+}
+
+function closeModal() {
+  modalOverlay.hidden = true;
+}
+
+function setupModal() {
+  modalClose.addEventListener("click", closeModal);
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modalOverlay.hidden) closeModal();
+  });
+}
+
 function setupDrag() {
   let startX = 0;
   let dragging = false;
-  const threshold = 60;
+  const dragThreshold = 60;
+  const clickThreshold = 5;
 
   const onDown = (e) => {
     dragging = true;
@@ -79,8 +113,12 @@ function setupDrag() {
     galleryImage.style.transform = "";
 
     const delta = e.clientX - startX;
-    if (delta <= -threshold) goTo(currentIndex + 1);
-    else if (delta >= threshold) goTo(currentIndex - 1);
+    if (Math.abs(delta) < clickThreshold) {
+      openModal(currentIndex);
+      return;
+    }
+    if (delta <= -dragThreshold) goTo(currentIndex + 1);
+    else if (delta >= dragThreshold) goTo(currentIndex - 1);
   };
 
   dragStage.addEventListener("pointerdown", onDown);
@@ -108,6 +146,7 @@ async function init() {
   renderIndexGrid();
   setupDrag();
   setupNav();
+  setupModal();
   showView("gallery");
 }
 

@@ -1,10 +1,74 @@
 [
-  { "id": "001", "title": "Untitled 01", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
-  { "id": "002", "title": "Untitled 02", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
-  { "id": "003", "title": "Untitled 03", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
-  { "id": "004", "title": "Untitled 04", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
-  { "id": "005", "title": "Untitled 05", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
-  { "id": "006", "title": "Untitled 06", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
-  { "id": "007", "title": "Untitled 07", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" },
-  { "id": "008", "title": "Untitled 08", "year": "2026", "medium": "", "image": "images/placeholder.svg", "description": "" }
+  {
+    "id": "001",
+    "title": "Untitled 01",
+    "year": "2026",
+    "medium": "",
+    "image": "images/placeholder.svg",
+    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
+    "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 길게 작성하세요. 텍스트가 이미지 높이를 넘어가면 이 영역만 스크롤됩니다.\n\n두 번째 문단입니다. 실제 콘텐츠로 교체하기 전까지는 이 placeholder 텍스트로 레이아웃과 스크롤 동작을 확인할 수 있습니다.\n\n세 번째 문단입니다. 인터뷰, 작업 노트, 전시 설명 등 원하는 내용을 자유롭게 채워 넣으면 됩니다. 문단이 많아질수록 오른쪽 텍스트 영역에서만 스크롤이 생기고, 왼쪽 이미지 두 장의 위치는 고정된 채로 유지됩니다."
+  },
+  {
+    "id": "002",
+    "title": "Untitled 02",
+    "year": "2026",
+    "medium": "",
+    "image": "images/placeholder.svg",
+    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
+    "text": "Untitled 02에 대한 설명 텍스트입니다. 이 필드를 실제 작품 설명으로 교체하세요."
+  },
+  {
+    "id": "003",
+    "title": "Untitled 03",
+    "year": "2026",
+    "medium": "",
+    "image": "images/placeholder.svg",
+    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
+    "text": "Untitled 03에 대한 설명 텍스트입니다. 이 필드를 실제 작품 설명으로 교체하세요."
+  },
+  {
+    "id": "004",
+    "title": "Untitled 04",
+    "year": "2026",
+    "medium": "",
+    "image": "images/placeholder.svg",
+    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
+    "text": "Untitled 04에 대한 설명 텍스트입니다. 이 필드를 실제 작품 설명으로 교체하세요."
+  },
+  {
+    "id": "005",
+    "title": "Untitled 05",
+    "year": "2026",
+    "medium": "",
+    "image": "images/placeholder.svg",
+    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
+    "text": "Untitled 05에 대한 설명 텍스트입니다. 이 필드를 실제 작품 설명으로 교체하세요."
+  },
+  {
+    "id": "006",
+    "title": "Untitled 06",
+    "year": "2026",
+    "medium": "",
+    "image": "images/placeholder.svg",
+    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
+    "text": "Untitled 06에 대한 설명 텍스트입니다. 이 필드를 실제 작품 설명으로 교체하세요."
+  },
+  {
+    "id": "007",
+    "title": "Untitled 07",
+    "year": "2026",
+    "medium": "",
+    "image": "images/placeholder.svg",
+    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
+    "text": "Untitled 07에 대한 설명 텍스트입니다. 이 필드를 실제 작품 설명으로 교체하세요."
+  },
+  {
+    "id": "008",
+    "title": "Untitled 08",
+    "year": "2026",
+    "medium": "",
+    "image": "images/placeholder.svg",
+    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
+    "text": "Untitled 08에 대한 설명 텍스트입니다. 이 필드를 실제 작품 설명으로 교체하세요."
+  }
 ]
