@@ -27,11 +27,17 @@ function showView(name) {
   });
 }
 
+function getRotate(index) {
+  const work = works[index];
+  return work && work.rotate ? work.rotate : 0;
+}
+
 function renderGallery() {
   const work = works[currentIndex];
   if (!work) return;
   galleryImage.src = work.image;
   galleryImage.alt = work.title;
+  galleryImage.style.transform = `rotate(${getRotate(currentIndex)}deg)`;
   counter.textContent = `${pad(currentIndex + 1)} / ${pad(works.length)}`;
 }
 
@@ -103,22 +109,24 @@ function setupDrag() {
   const onMove = (e) => {
     if (!dragging) return;
     const delta = e.clientX - startX;
-    galleryImage.style.transform = `translateX(${delta * 0.3}px)`;
+    const rotate = getRotate(currentIndex);
+    galleryImage.style.transform = `translateX(${delta * 0.3}px) rotate(${rotate}deg)`;
   };
 
   const onUp = (e) => {
     if (!dragging) return;
     dragging = false;
     dragStage.classList.remove("dragging");
-    galleryImage.style.transform = "";
 
     const delta = e.clientX - startX;
     if (Math.abs(delta) < clickThreshold) {
+      galleryImage.style.transform = `rotate(${getRotate(currentIndex)}deg)`;
       openModal(currentIndex);
       return;
     }
     if (delta <= -dragThreshold) goTo(currentIndex + 1);
     else if (delta >= dragThreshold) goTo(currentIndex - 1);
+    else galleryImage.style.transform = `rotate(${getRotate(currentIndex)}deg)`;
   };
 
   dragStage.addEventListener("pointerdown", onDown);
