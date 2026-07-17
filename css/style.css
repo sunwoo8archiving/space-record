@@ -76,9 +76,29 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: calc(100vh - 80px);
-  gap: 24px;
+  gap: 8px;
+  padding-top: 16px;
+}
+
+.viewer-tabs,
+.index-tabs {
+  display: flex;
+  gap: 20px;
+}
+
+.viewer-tabs button,
+.index-tabs button {
+  font-size: 14px;
+  color: var(--muted);
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+}
+
+.viewer-tabs button.active,
+.index-tabs button.active {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
 }
 
 .drag-stage {
@@ -106,20 +126,8 @@ main {
 }
 
 .viewer-caption {
-  display: flex;
-  gap: 8px;
   font-size: 13px;
   color: var(--muted);
-}
-
-.viewer-caption span:not(:empty)::after {
-  content: "·";
-  margin-left: 8px;
-}
-
-.viewer-caption span:last-child::after {
-  content: "";
-  margin-left: 0;
 }
 
 .counter {
@@ -131,21 +139,11 @@ main {
 
 /* Index: tabs + thumbnail grid */
 .index-tabs {
-  display: flex;
-  gap: 20px;
   padding: 0 32px 24px;
 }
 
-.index-tabs button {
-  font-size: 14px;
-  color: var(--muted);
-  padding-bottom: 4px;
-  border-bottom: 2px solid transparent;
-}
-
-.index-tabs button.active {
-  color: var(--fg);
-  border-bottom-color: var(--fg);
+.index-item.unsubmitted {
+  opacity: 0.4;
 }
 
 .index-grid {

@@ -1,47 +1,542 @@
 [
   {
-    "id": "spacesuit-001",
-    "type": "spacesuit",
+    "id": "001",
     "student": "학생 이름 입력",
-    "title": "Untitled",
-    "year": "2026",
-    "medium": "",
-    "image": "images/spacesuit/ast_sunwoo.png",
-    "rotate": 45,
-    "detailImages": ["images/spacesuit/ast_sunwoo.png", "images/spacesuit/ast_sunwoo.png"],
-    "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요."
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/spacesuit/ast_sunwoo.png",
+      "rotate": 45,
+      "detailImages": [
+        "images/spacesuit/ast_sunwoo.png",
+        "images/spacesuit/ast_sunwoo.png"
+      ],
+      "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요.",
+      "submitted": true
+    }
   },
   {
-    "id": "spacesuit-002",
-    "type": "spacesuit",
+    "id": "002",
     "student": "학생 이름 입력",
-    "title": "Untitled",
-    "year": "2026",
-    "medium": "",
-    "image": "images/placeholder.svg",
-    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
-    "text": "우주복 작품 설명 placeholder입니다."
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
   },
   {
-    "id": "spaceship-001",
-    "type": "spaceship",
+    "id": "003",
     "student": "학생 이름 입력",
-    "title": "Untitled",
-    "year": "2026",
-    "medium": "",
-    "image": "images/placeholder.svg",
-    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
-    "text": "우주선 작품 설명 placeholder입니다."
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
   },
   {
-    "id": "spaceship-002",
-    "type": "spaceship",
+    "id": "004",
     "student": "학생 이름 입력",
-    "title": "Untitled",
-    "year": "2026",
-    "medium": "",
-    "image": "images/placeholder.svg",
-    "detailImages": ["images/placeholder.svg", "images/placeholder.svg"],
-    "text": "우주선 작품 설명 placeholder입니다."
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "005",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "006",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "007",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "008",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "009",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "010",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "011",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "012",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "013",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "014",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "015",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "016",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "017",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "018",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
   }
 ]

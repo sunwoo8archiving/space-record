@@ -1,12 +1,12 @@
 const TYPE_LABELS = { spaceship: "우주선", spacesuit: "우주복" };
 
-let works = [];
-let currentType = "spaceship";
+let students = [];
 let currentIndex = 0;
+let currentType = "spaceship";
 
 const galleryImage = document.getElementById("gallery-image");
 const viewerStudent = document.getElementById("viewer-student");
-const viewerType = document.getElementById("viewer-type");
+const viewerTabs = document.getElementById("viewer-tabs");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
 const indexGrid = document.getElementById("index-grid");
@@ -31,10 +31,13 @@ function showView(name) {
   Object.entries(views).forEach(([key, el]) => {
     el.hidden = key !== name;
   });
+  if (name === "index") renderIndexGrid();
+  if (name === "gallery") renderGallery();
 }
 
-function getFiltered() {
-  return works.filter((w) => w.type === currentType);
+function getWork(index, type) {
+  const student = students[index];
+  return student ? student[type] : null;
 }
 
 function getRotate(work) {
@@ -42,30 +45,27 @@ function getRotate(work) {
 }
 
 function renderGallery() {
-  const list = getFiltered();
-  const work = list[currentIndex];
+  const student = students[currentIndex];
+  const work = getWork(currentIndex, currentType);
 
-  if (!work) {
-    galleryImage.src = "";
-    galleryImage.alt = "";
-    galleryImage.style.transform = "";
-    viewerStudent.textContent = "";
-    viewerType.textContent = TYPE_LABELS[currentType] || "";
-    counter.textContent = "00 / 00";
-    return;
-  }
-
-  galleryImage.src = work.image;
-  galleryImage.alt = work.title;
+  galleryImage.src = work ? work.image : "images/placeholder.svg";
+  galleryImage.alt = work ? work.title : "";
   galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
-  viewerStudent.textContent = work.student || "";
-  viewerType.textContent = TYPE_LABELS[work.type] || "";
-  counter.textContent = `${pad(currentIndex + 1)} / ${pad(list.length)}`;
+  viewerStudent.textContent = student ? student.student : "";
+  counter.textContent = `${pad(currentIndex + 1)} / ${pad(students.length)}`;
+
+  viewerTabs.querySelectorAll("button").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.type === currentType);
+  });
 }
 
 function goTo(index) {
-  const list = getFiltered();
-  currentIndex = Math.max(0, Math.min(list.length - 1, index));
+  currentIndex = Math.max(0, Math.min(students.length - 1, index));
+  renderGallery();
+}
+
+function setType(type) {
+  currentType = type;
   renderGallery();
 }
 
@@ -75,17 +75,17 @@ function openViewerAt(type, index) {
 }
 
 function renderIndexGrid() {
-  const list = getFiltered();
-
-  indexGrid.innerHTML = list
-    .map(
-      (w, i) => `
-        <button class="index-item" data-index="${i}" type="button">
-          <img src="${w.image}" alt="${w.title}" loading="lazy">
-          <span class="meta">${pad(i + 1)} — ${w.student || w.title}</span>
+  indexGrid.innerHTML = students
+    .map((s, i) => {
+      const work = s[currentType];
+      const submitted = work && work.submitted;
+      return `
+        <button class="index-item${submitted ? "" : " unsubmitted"}" data-index="${i}" type="button">
+          <img src="${work ? work.image : "images/placeholder.svg"}" alt="${s.student}" loading="lazy">
+          <span class="meta">${pad(i + 1)} — ${s.student}${submitted ? "" : " (미제출)"}</span>
         </button>
-      `
-    )
+      `;
+    })
     .join("");
 
   indexGrid.querySelectorAll(".index-item").forEach((el) => {
@@ -104,9 +104,14 @@ function setupIndexTabs() {
   indexTabs.querySelectorAll("button").forEach((btn) => {
     btn.addEventListener("click", () => {
       currentType = btn.dataset.type;
-      currentIndex = 0;
       renderIndexGrid();
     });
+  });
+}
+
+function setupViewerTabs() {
+  viewerTabs.querySelectorAll("button").forEach((btn) => {
+    btn.addEventListener("click", () => setType(btn.dataset.type));
   });
 }
 
@@ -152,7 +157,7 @@ function setupDrag() {
   const onMove = (e) => {
     if (!dragging) return;
     const delta = e.clientX - startX;
-    const work = getFiltered()[currentIndex];
+    const work = getWork(currentIndex, currentType);
     const rotate = getRotate(work);
     galleryImage.style.transform = `translateX(${delta * 0.3}px) rotate(${rotate}deg)`;
   };
@@ -163,7 +168,7 @@ function setupDrag() {
     dragStage.classList.remove("dragging");
 
     const delta = e.clientX - startX;
-    const work = getFiltered()[currentIndex];
+    const work = getWork(currentIndex, currentType);
 
     if (Math.abs(delta) < clickThreshold) {
       galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
@@ -195,13 +200,14 @@ function setupNav() {
 
 async function init() {
   const res = await fetch("data/works.json", { cache: "no-store" });
-  works = await res.json();
+  students = await res.json();
   renderGallery();
   renderIndexGrid();
   setupDrag();
   setupNav();
   setupModal();
   setupIndexTabs();
+  setupViewerTabs();
   showView("gallery");
 }
 

@@ -17,12 +17,15 @@
 
   <main>
     <section id="view-gallery" class="view view-gallery">
+      <div class="viewer-tabs" id="viewer-tabs">
+        <button data-type="spaceship" type="button">우주선</button>
+        <button data-type="spacesuit" type="button">우주복</button>
+      </div>
       <div class="drag-stage" id="drag-stage">
         <img id="gallery-image" src="" alt="" draggable="false">
       </div>
       <div class="viewer-caption">
         <span id="viewer-student"></span>
-        <span id="viewer-type"></span>
       </div>
       <div class="counter" id="counter"></div>
     </section>
