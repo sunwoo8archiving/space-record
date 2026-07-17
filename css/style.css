@@ -105,6 +105,23 @@ main {
   transition: opacity 0.15s ease, transform 0.2s ease;
 }
 
+.viewer-caption {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.viewer-caption span:not(:empty)::after {
+  content: "·";
+  margin-left: 8px;
+}
+
+.viewer-caption span:last-child::after {
+  content: "";
+  margin-left: 0;
+}
+
 .counter {
   font-size: 13px;
   color: var(--muted);
@@ -112,7 +129,25 @@ main {
   letter-spacing: 0.02em;
 }
 
-/* Index: thumbnail grid */
+/* Index: tabs + thumbnail grid */
+.index-tabs {
+  display: flex;
+  gap: 20px;
+  padding: 0 32px 24px;
+}
+
+.index-tabs button {
+  font-size: 14px;
+  color: var(--muted);
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+}
+
+.index-tabs button.active {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
 .index-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

@@ -1,10 +1,16 @@
+const TYPE_LABELS = { spaceship: "우주선", spacesuit: "우주복" };
+
 let works = [];
+let currentType = "spaceship";
 let currentIndex = 0;
 
 const galleryImage = document.getElementById("gallery-image");
+const viewerStudent = document.getElementById("viewer-student");
+const viewerType = document.getElementById("viewer-type");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
 const indexGrid = document.getElementById("index-grid");
+const indexTabs = document.getElementById("index-tabs");
 const views = {
   gallery: document.getElementById("view-gallery"),
   index: document.getElementById("view-index"),
@@ -27,32 +33,56 @@ function showView(name) {
   });
 }
 
-function getRotate(index) {
-  const work = works[index];
+function getFiltered() {
+  return works.filter((w) => w.type === currentType);
+}
+
+function getRotate(work) {
   return work && work.rotate ? work.rotate : 0;
 }
 
 function renderGallery() {
-  const work = works[currentIndex];
-  if (!work) return;
+  const list = getFiltered();
+  const work = list[currentIndex];
+
+  if (!work) {
+    galleryImage.src = "";
+    galleryImage.alt = "";
+    galleryImage.style.transform = "";
+    viewerStudent.textContent = "";
+    viewerType.textContent = TYPE_LABELS[currentType] || "";
+    counter.textContent = "00 / 00";
+    return;
+  }
+
   galleryImage.src = work.image;
   galleryImage.alt = work.title;
-  galleryImage.style.transform = `rotate(${getRotate(currentIndex)}deg)`;
-  counter.textContent = `${pad(currentIndex + 1)} / ${pad(works.length)}`;
+  galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
+  viewerStudent.textContent = work.student || "";
+  viewerType.textContent = TYPE_LABELS[work.type] || "";
+  counter.textContent = `${pad(currentIndex + 1)} / ${pad(list.length)}`;
 }
 
 function goTo(index) {
-  currentIndex = Math.max(0, Math.min(works.length - 1, index));
+  const list = getFiltered();
+  currentIndex = Math.max(0, Math.min(list.length - 1, index));
   renderGallery();
 }
 
+function openViewerAt(type, index) {
+  currentType = type;
+  goTo(index);
+}
+
 function renderIndexGrid() {
-  indexGrid.innerHTML = works
+  const list = getFiltered();
+
+  indexGrid.innerHTML = list
     .map(
       (w, i) => `
         <button class="index-item" data-index="${i}" type="button">
           <img src="${w.image}" alt="${w.title}" loading="lazy">
-          <span class="meta">${pad(i + 1)} — ${w.title}${w.year ? ", " + w.year : ""}</span>
+          <span class="meta">${pad(i + 1)} — ${w.student || w.title}</span>
         </button>
       `
     )
@@ -60,14 +90,27 @@ function renderIndexGrid() {
 
   indexGrid.querySelectorAll(".index-item").forEach((el) => {
     el.addEventListener("click", () => {
-      goTo(Number(el.dataset.index));
+      openViewerAt(currentType, Number(el.dataset.index));
       showView("gallery");
+    });
+  });
+
+  indexTabs.querySelectorAll("button").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.type === currentType);
+  });
+}
+
+function setupIndexTabs() {
+  indexTabs.querySelectorAll("button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentType = btn.dataset.type;
+      currentIndex = 0;
+      renderIndexGrid();
     });
   });
 }
 
-function openModal(index) {
-  const work = works[index];
+function openModal(work) {
   if (!work) return;
   const [img1, img2] =
     work.detailImages && work.detailImages.length ? work.detailImages : [work.image, work.image];
@@ -109,7 +152,8 @@ function setupDrag() {
   const onMove = (e) => {
     if (!dragging) return;
     const delta = e.clientX - startX;
-    const rotate = getRotate(currentIndex);
+    const work = getFiltered()[currentIndex];
+    const rotate = getRotate(work);
     galleryImage.style.transform = `translateX(${delta * 0.3}px) rotate(${rotate}deg)`;
   };
 
@@ -119,14 +163,16 @@ function setupDrag() {
     dragStage.classList.remove("dragging");
 
     const delta = e.clientX - startX;
+    const work = getFiltered()[currentIndex];
+
     if (Math.abs(delta) < clickThreshold) {
-      galleryImage.style.transform = `rotate(${getRotate(currentIndex)}deg)`;
-      openModal(currentIndex);
+      galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
+      openModal(work);
       return;
     }
     if (delta <= -dragThreshold) goTo(currentIndex + 1);
     else if (delta >= dragThreshold) goTo(currentIndex - 1);
-    else galleryImage.style.transform = `rotate(${getRotate(currentIndex)}deg)`;
+    else galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
   };
 
   dragStage.addEventListener("pointerdown", onDown);
@@ -155,6 +201,7 @@ async function init() {
   setupDrag();
   setupNav();
   setupModal();
+  setupIndexTabs();
   showView("gallery");
 }
 
