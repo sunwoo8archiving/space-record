@@ -32,6 +32,9 @@ function showView(name) {
   Object.entries(views).forEach(([key, el]) => {
     el.hidden = key !== name;
   });
+  document.querySelectorAll(".site-nav [data-view]").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.view === name);
+  });
   if (name === "index") renderIndexGrid();
   if (name === "gallery") renderGallery();
 }
@@ -250,7 +253,11 @@ function setupDrag() {
 
 function setupNav() {
   document.querySelectorAll("[data-view]").forEach((el) => {
-    el.addEventListener("click", () => showView(el.dataset.view));
+    el.addEventListener("click", () => {
+      const target = el.dataset.view;
+      // clicking the nav button for the view already showing returns to gallery
+      showView(!views[target].hidden ? "gallery" : target);
+    });
   });
 }
 

@@ -40,11 +40,6 @@ button {
   z-index: 10;
 }
 
-.site-title {
-  font-size: 20px;
-  font-weight: 600;
-}
-
 .site-nav {
   display: flex;
   gap: 20px;
@@ -52,10 +47,18 @@ button {
 
 .site-nav button {
   font-size: 14px;
+  color: var(--muted);
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
 }
 
 .site-nav button:hover {
-  color: var(--muted);
+  color: var(--fg);
+}
+
+.site-nav button.active {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
 }
 
 main {

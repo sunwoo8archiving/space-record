@@ -8,7 +8,10 @@
 </head>
 <body>
   <header class="site-header">
-    <button class="site-title" data-view="gallery" type="button">Dongbuk</button>
+    <div class="viewer-tabs" id="viewer-tabs">
+      <button data-type="spaceship" type="button">우주선</button>
+      <button data-type="spacesuit" type="button">우주복</button>
+    </div>
     <nav class="site-nav">
       <button data-view="info" type="button">Info</button>
       <button data-view="index" type="button">Index</button>
@@ -17,10 +20,6 @@
 
   <main>
     <section id="view-gallery" class="view view-gallery">
-      <div class="viewer-tabs" id="viewer-tabs">
-        <button data-type="spaceship" type="button">우주선</button>
-        <button data-type="spacesuit" type="button">우주복</button>
-      </div>
       <div class="viewer-marquee" id="viewer-marquee">
         <div class="viewer-marquee-track" id="viewer-marquee-track"></div>
       </div>
