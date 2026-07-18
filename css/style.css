@@ -84,22 +84,19 @@ main {
   padding-top: 16px;
 }
 
-.viewer-tabs,
-.index-tabs {
+.viewer-tabs {
   display: flex;
   gap: 20px;
 }
 
-.viewer-tabs button,
-.index-tabs button {
+.viewer-tabs button {
   font-size: 14px;
   color: var(--muted);
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
 }
 
-.viewer-tabs button.active,
-.index-tabs button.active {
+.viewer-tabs button.active {
   color: var(--fg);
   border-bottom-color: var(--fg);
 }
@@ -178,11 +175,7 @@ main {
   letter-spacing: 0.02em;
 }
 
-/* Index: tabs + thumbnail grid */
-.index-tabs {
-  padding: 0 32px 24px;
-}
-
+/* Index: thumbnail grid */
 .index-item.unsubmitted {
   opacity: 0.4;
 }
@@ -191,7 +184,7 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--gap);
-  padding: 0 32px 48px;
+  padding: 32px 32px 48px;
 }
 
 .index-item {

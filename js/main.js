@@ -11,7 +11,6 @@ const viewerMarqueeTrack = document.getElementById("viewer-marquee-track");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
 const indexGrid = document.getElementById("index-grid");
-const indexTabs = document.getElementById("index-tabs");
 const views = {
   gallery: document.getElementById("view-gallery"),
   index: document.getElementById("view-index"),
@@ -93,6 +92,7 @@ function goTo(index) {
 function setType(type) {
   currentType = type;
   renderGallery();
+  renderIndexGrid();
 }
 
 function openViewerAt(type, index) {
@@ -118,19 +118,6 @@ function renderIndexGrid() {
     el.addEventListener("click", () => {
       openViewerAt(currentType, Number(el.dataset.index));
       showView("gallery");
-    });
-  });
-
-  indexTabs.querySelectorAll("button").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.type === currentType);
-  });
-}
-
-function setupIndexTabs() {
-  indexTabs.querySelectorAll("button").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      currentType = btn.dataset.type;
-      renderIndexGrid();
     });
   });
 }
@@ -270,7 +257,6 @@ async function init() {
   setupDrag();
   setupNav();
   setupModal();
-  setupIndexTabs();
   setupViewerTabs();
   showView("gallery");
 }
