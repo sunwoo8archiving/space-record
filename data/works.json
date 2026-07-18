@@ -19,14 +19,14 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/student01-spacesuit.png",
-      "rotate": 45,
+      "image": "images/placeholder.svg",
+      "rotate": 0,
       "detailImages": [
-        "images/spacesuit/student01-spacesuit.png",
-        "images/spacesuit/student01-spacesuit.png"
+        "images/placeholder.svg",
+        "images/placeholder.svg"
       ],
-      "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요.",
-      "submitted": true
+      "text": "",
+      "submitted": false
     }
   },
   {
@@ -546,27 +546,27 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/placeholder.svg",
+      "image": "images/spaceship/student19-spaceship.png",
       "rotate": 0,
       "detailImages": [
-        "images/placeholder.svg",
-        "images/placeholder.svg"
+        "images/spaceship/student19-spaceship.png",
+        "images/spaceship/student19-spaceship.png"
       ],
-      "text": "",
-      "submitted": false
+      "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요.",
+      "submitted": true
     },
     "spacesuit": {
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/placeholder.svg",
-      "rotate": 0,
+      "image": "images/spacesuit/student19-spacesuit.png",
+      "rotate": 45,
       "detailImages": [
-        "images/placeholder.svg",
-        "images/placeholder.svg"
+        "images/spacesuit/student19-spacesuit.png",
+        "images/spacesuit/student19-spacesuit.png"
       ],
-      "text": "",
-      "submitted": false
+      "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요.",
+      "submitted": true
     }
   }
 ]
