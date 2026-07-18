@@ -45,7 +45,7 @@ button {
 }
 
 .site-nav button {
-  font-size: 64px;
+  font-size: 48px;
   color: var(--muted);
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
@@ -89,7 +89,7 @@ main {
 }
 
 .viewer-tabs button {
-  font-size: 64px;
+  font-size: 48px;
   color: var(--muted);
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
@@ -159,7 +159,6 @@ main {
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
-  transition: opacity 0.15s ease, transform 0.2s ease;
 }
 
 .viewer-caption {
