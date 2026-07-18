@@ -7,6 +7,7 @@ let currentType = "spaceship";
 const galleryImage = document.getElementById("gallery-image");
 const viewerStudent = document.getElementById("viewer-student");
 const viewerTabs = document.getElementById("viewer-tabs");
+const viewerMarqueeTrack = document.getElementById("viewer-marquee-track");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
 const indexGrid = document.getElementById("index-grid");
@@ -44,6 +45,12 @@ function getRotate(work) {
   return work && work.rotate ? work.rotate : 0;
 }
 
+function studentLabel(index) {
+  const student = students[index];
+  const name = student ? student.student : "";
+  return name && name !== "학생 이름 입력" ? name : pad(index + 1);
+}
+
 function renderGallery() {
   const student = students[currentIndex];
   const work = getWork(currentIndex, currentType);
@@ -56,6 +63,22 @@ function renderGallery() {
 
   viewerTabs.querySelectorAll("button").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.type === currentType);
+  });
+
+  viewerMarqueeTrack.querySelectorAll("button").forEach((btn) => {
+    btn.classList.toggle("active", Number(btn.dataset.index) === currentIndex);
+  });
+}
+
+function renderMarquee() {
+  const items = students
+    .map((_, i) => `<button data-index="${i}" type="button">${studentLabel(i)}</button>`)
+    .join("");
+  // duplicated so the -50% translateX loop is seamless
+  viewerMarqueeTrack.innerHTML = items + items;
+
+  viewerMarqueeTrack.querySelectorAll("button").forEach((btn) => {
+    btn.addEventListener("click", () => goTo(Number(btn.dataset.index)));
   });
 }
 
@@ -201,6 +224,7 @@ function setupNav() {
 async function init() {
   const res = await fetch("data/works.json", { cache: "no-store" });
   students = await res.json();
+  renderMarquee();
   renderGallery();
   renderIndexGrid();
   setupDrag();
