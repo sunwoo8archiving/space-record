@@ -1,5 +1,3 @@
-const TYPE_LABELS = { spaceship: "우주선", spacesuit: "우주복" };
-
 let students = [];
 let currentIndex = 0;
 let currentType = "spaceship";
@@ -10,10 +8,8 @@ const viewerTabs = document.getElementById("viewer-tabs");
 const viewerMarqueeTrack = document.getElementById("viewer-marquee-track");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
-const indexGrid = document.getElementById("index-grid");
 const views = {
   gallery: document.getElementById("view-gallery"),
-  index: document.getElementById("view-index"),
   info: document.getElementById("view-info"),
 };
 
@@ -34,7 +30,6 @@ function showView(name) {
   document.querySelectorAll(".site-nav [data-view]").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.view === name);
   });
-  if (name === "index") renderIndexGrid();
   if (name === "gallery") renderGallery();
 }
 
@@ -92,34 +87,6 @@ function goTo(index) {
 function setType(type) {
   currentType = type;
   renderGallery();
-  renderIndexGrid();
-}
-
-function openViewerAt(type, index) {
-  currentType = type;
-  goTo(index);
-}
-
-function renderIndexGrid() {
-  indexGrid.innerHTML = students
-    .map((s, i) => {
-      const work = s[currentType];
-      const submitted = work && work.submitted;
-      return `
-        <button class="index-item${submitted ? "" : " unsubmitted"}" data-index="${i}" type="button">
-          <img src="${work ? work.image : "images/placeholder.svg"}" alt="${s.student}" loading="lazy">
-          <span class="meta">${pad(i + 1)} — ${s.student}${submitted ? "" : " (미제출)"}</span>
-        </button>
-      `;
-    })
-    .join("");
-
-  indexGrid.querySelectorAll(".index-item").forEach((el) => {
-    el.addEventListener("click", () => {
-      openViewerAt(currentType, Number(el.dataset.index));
-      showView("gallery");
-    });
-  });
 }
 
 function setupViewerTabs() {
@@ -253,7 +220,6 @@ async function init() {
   students = await res.json();
   renderMarquee();
   renderGallery();
-  renderIndexGrid();
   setupDrag();
   setupNav();
   setupModal();

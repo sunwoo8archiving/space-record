@@ -2,7 +2,6 @@
   --bg: #fff;
   --fg: #111;
   --muted: #666;
-  --gap: 24px;
 }
 
 * {
@@ -173,37 +172,6 @@ main {
   color: var(--muted);
   padding-bottom: 24px;
   letter-spacing: 0.02em;
-}
-
-/* Index: thumbnail grid */
-.index-item.unsubmitted {
-  opacity: 0.4;
-}
-
-.index-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--gap);
-  padding: 32px 32px 48px;
-}
-
-.index-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: left;
-}
-
-.index-item img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background: #ddd;
-}
-
-.index-item .meta {
-  font-size: 13px;
-  color: var(--muted);
 }
 
 /* Info */
