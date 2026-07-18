@@ -19,11 +19,11 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/ast_sunwoo.png",
+      "image": "images/spacesuit/student01-spacesuit.png",
       "rotate": 45,
       "detailImages": [
-        "images/spacesuit/ast_sunwoo.png",
-        "images/spacesuit/ast_sunwoo.png"
+        "images/spacesuit/student01-spacesuit.png",
+        "images/spacesuit/student01-spacesuit.png"
       ],
       "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요.",
       "submitted": true
@@ -511,6 +511,36 @@
   },
   {
     "id": "018",
+    "student": "학생 이름 입력",
+    "spaceship": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    },
+    "spacesuit": {
+      "title": "Untitled",
+      "year": "2026",
+      "medium": "",
+      "image": "images/placeholder.svg",
+      "rotate": 0,
+      "detailImages": [
+        "images/placeholder.svg",
+        "images/placeholder.svg"
+      ],
+      "text": "",
+      "submitted": false
+    }
+  },
+  {
+    "id": "019",
     "student": "학생 이름 입력",
     "spaceship": {
       "title": "Untitled",
