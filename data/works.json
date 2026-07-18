@@ -8,11 +8,6 @@
       "medium": "",
       "image": "images/spaceship/student01-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student01-spaceship-temp.svg",
-        "images/spaceship/student01-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -21,13 +16,9 @@
       "medium": "",
       "image": "images/spacesuit/student01-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student01-spacesuit-temp.svg",
-        "images/spacesuit/student01-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "002",
@@ -38,11 +29,6 @@
       "medium": "",
       "image": "images/spaceship/student02-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student02-spaceship-temp.svg",
-        "images/spaceship/student02-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -51,13 +37,9 @@
       "medium": "",
       "image": "images/spacesuit/student02-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student02-spacesuit-temp.svg",
-        "images/spacesuit/student02-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "003",
@@ -68,11 +50,6 @@
       "medium": "",
       "image": "images/spaceship/student03-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student03-spaceship-temp.svg",
-        "images/spaceship/student03-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -81,13 +58,9 @@
       "medium": "",
       "image": "images/spacesuit/student03-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student03-spacesuit-temp.svg",
-        "images/spacesuit/student03-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "004",
@@ -98,11 +71,6 @@
       "medium": "",
       "image": "images/spaceship/student04-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student04-spaceship-temp.svg",
-        "images/spaceship/student04-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -111,13 +79,9 @@
       "medium": "",
       "image": "images/spacesuit/student04-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student04-spacesuit-temp.svg",
-        "images/spacesuit/student04-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "005",
@@ -128,11 +92,6 @@
       "medium": "",
       "image": "images/spaceship/student05-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student05-spaceship-temp.svg",
-        "images/spaceship/student05-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -141,13 +100,9 @@
       "medium": "",
       "image": "images/spacesuit/student05-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student05-spacesuit-temp.svg",
-        "images/spacesuit/student05-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "006",
@@ -158,11 +113,6 @@
       "medium": "",
       "image": "images/spaceship/student06-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student06-spaceship-temp.svg",
-        "images/spaceship/student06-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -171,13 +121,9 @@
       "medium": "",
       "image": "images/spacesuit/student06-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student06-spacesuit-temp.svg",
-        "images/spacesuit/student06-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "007",
@@ -188,11 +134,6 @@
       "medium": "",
       "image": "images/spaceship/student07-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student07-spaceship-temp.svg",
-        "images/spaceship/student07-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -201,13 +142,9 @@
       "medium": "",
       "image": "images/spacesuit/student07-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student07-spacesuit-temp.svg",
-        "images/spacesuit/student07-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "008",
@@ -218,11 +155,6 @@
       "medium": "",
       "image": "images/spaceship/student08-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student08-spaceship-temp.svg",
-        "images/spaceship/student08-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -231,13 +163,9 @@
       "medium": "",
       "image": "images/spacesuit/student08-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student08-spacesuit-temp.svg",
-        "images/spacesuit/student08-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "009",
@@ -248,11 +176,6 @@
       "medium": "",
       "image": "images/spaceship/student09-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student09-spaceship-temp.svg",
-        "images/spaceship/student09-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -261,13 +184,9 @@
       "medium": "",
       "image": "images/spacesuit/student09-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student09-spacesuit-temp.svg",
-        "images/spacesuit/student09-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "010",
@@ -278,11 +197,6 @@
       "medium": "",
       "image": "images/spaceship/student10-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student10-spaceship-temp.svg",
-        "images/spaceship/student10-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -291,13 +205,9 @@
       "medium": "",
       "image": "images/spacesuit/student10-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student10-spacesuit-temp.svg",
-        "images/spacesuit/student10-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "011",
@@ -308,11 +218,6 @@
       "medium": "",
       "image": "images/spaceship/student11-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student11-spaceship-temp.svg",
-        "images/spaceship/student11-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -321,13 +226,9 @@
       "medium": "",
       "image": "images/spacesuit/student11-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student11-spacesuit-temp.svg",
-        "images/spacesuit/student11-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "012",
@@ -338,11 +239,6 @@
       "medium": "",
       "image": "images/spaceship/student12-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student12-spaceship-temp.svg",
-        "images/spaceship/student12-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -351,13 +247,9 @@
       "medium": "",
       "image": "images/spacesuit/student12-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student12-spacesuit-temp.svg",
-        "images/spacesuit/student12-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "013",
@@ -368,11 +260,6 @@
       "medium": "",
       "image": "images/spaceship/student13-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student13-spaceship-temp.svg",
-        "images/spaceship/student13-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -381,13 +268,9 @@
       "medium": "",
       "image": "images/spacesuit/student13-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student13-spacesuit-temp.svg",
-        "images/spacesuit/student13-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "014",
@@ -398,11 +281,6 @@
       "medium": "",
       "image": "images/spaceship/student14-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student14-spaceship-temp.svg",
-        "images/spaceship/student14-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -411,13 +289,9 @@
       "medium": "",
       "image": "images/spacesuit/student14-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student14-spacesuit-temp.svg",
-        "images/spacesuit/student14-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "015",
@@ -428,11 +302,6 @@
       "medium": "",
       "image": "images/spaceship/student15-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student15-spaceship-temp.svg",
-        "images/spaceship/student15-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -441,13 +310,9 @@
       "medium": "",
       "image": "images/spacesuit/student15-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student15-spacesuit-temp.svg",
-        "images/spacesuit/student15-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "016",
@@ -458,11 +323,6 @@
       "medium": "",
       "image": "images/spaceship/student16-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student16-spaceship-temp.svg",
-        "images/spaceship/student16-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -471,13 +331,9 @@
       "medium": "",
       "image": "images/spacesuit/student16-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student16-spacesuit-temp.svg",
-        "images/spacesuit/student16-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "017",
@@ -488,11 +344,6 @@
       "medium": "",
       "image": "images/spaceship/student17-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student17-spaceship-temp.svg",
-        "images/spaceship/student17-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -501,13 +352,9 @@
       "medium": "",
       "image": "images/spacesuit/student17-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student17-spacesuit-temp.svg",
-        "images/spacesuit/student17-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "018",
@@ -518,11 +365,6 @@
       "medium": "",
       "image": "images/spaceship/student18-spaceship-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student18-spaceship-temp.svg",
-        "images/spaceship/student18-spaceship-temp.svg"
-      ],
-      "text": "",
       "submitted": false
     },
     "spacesuit": {
@@ -531,13 +373,9 @@
       "medium": "",
       "image": "images/spacesuit/student18-spacesuit-temp.svg",
       "rotate": 0,
-      "detailImages": [
-        "images/spacesuit/student18-spacesuit-temp.svg",
-        "images/spacesuit/student18-spacesuit-temp.svg"
-      ],
-      "text": "",
       "submitted": false
-    }
+    },
+    "text": ""
   },
   {
     "id": "019",
@@ -548,11 +386,6 @@
       "medium": "",
       "image": "images/spaceship/student19-spaceship.png",
       "rotate": 0,
-      "detailImages": [
-        "images/spaceship/student19-spaceship.png",
-        "images/spaceship/student19-spaceship.png"
-      ],
-      "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요.",
       "submitted": true
     },
     "spacesuit": {
@@ -561,12 +394,8 @@
       "medium": "",
       "image": "images/spacesuit/student19-spacesuit.png",
       "rotate": 45,
-      "detailImages": [
-        "images/spacesuit/student19-spacesuit.png",
-        "images/spacesuit/student19-spacesuit.png"
-      ],
-      "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요.",
       "submitted": true
-    }
+    },
+    "text": "여기에 작품에 대한 인터뷰나 설명 텍스트를 작성하세요."
   }
 ]

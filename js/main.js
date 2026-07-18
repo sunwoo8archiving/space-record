@@ -95,15 +95,15 @@ function setupViewerTabs() {
   });
 }
 
-function openModal(work) {
-  if (!work) return;
-  const [img1, img2] =
-    work.detailImages && work.detailImages.length ? work.detailImages : [work.image, work.image];
-  modalImage1.src = img1;
-  modalImage1.alt = work.title;
-  modalImage2.src = img2;
-  modalImage2.alt = work.title;
-  modalText.textContent = work.text || work.description || "";
+function openModal(student) {
+  if (!student) return;
+  const spaceship = student.spaceship;
+  const spacesuit = student.spacesuit;
+  modalImage1.src = spaceship ? spaceship.image : "images/placeholder.svg";
+  modalImage1.alt = "우주선";
+  modalImage2.src = spacesuit ? spacesuit.image : "images/placeholder.svg";
+  modalImage2.alt = "우주복";
+  modalText.textContent = student.text || "";
   modalOverlay.hidden = false;
 }
 
@@ -187,7 +187,7 @@ function setupDrag() {
 
     if (Math.abs(totalDelta) < clickThreshold) {
       galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
-      openModal(work);
+      openModal(students[currentIndex]);
       return;
     }
     galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
