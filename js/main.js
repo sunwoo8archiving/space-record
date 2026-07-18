@@ -28,7 +28,9 @@ function showView(name) {
     el.hidden = key !== name;
   });
   document.querySelectorAll(".site-nav [data-view]").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.view === name);
+    const isActive = btn.dataset.view === name;
+    btn.classList.toggle("active", isActive);
+    btn.textContent = isActive ? "Close" : btn.dataset.label;
   });
   if (name === "gallery") renderGallery();
 }
@@ -213,6 +215,7 @@ function setupNav() {
       showView(!views[target].hidden ? "gallery" : target);
     });
   });
+  document.getElementById("info-close").addEventListener("click", () => showView("gallery"));
 }
 
 async function init() {

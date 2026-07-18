@@ -176,8 +176,17 @@ main {
 
 /* Info */
 .view-info {
+  position: relative;
   padding: 48px 32px;
   max-width: 640px;
+}
+
+.view-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 28px;
+  line-height: 1;
 }
 
 /* Detail modal */
