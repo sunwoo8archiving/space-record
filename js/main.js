@@ -165,24 +165,58 @@ function setupModal() {
 }
 
 function setupDrag() {
-  let startX = 0;
+  let startX = 0; // fixed at pointerdown, used only to detect a "click" (no real drag)
+  let baseX = 0; // rebased every time a step is consumed, used for the visual offset
   let dragging = false;
   const dragThreshold = 60;
   const clickThreshold = 5;
+  const followFactor = 0.3;
+  const resistFactor = 0.3; // extra damping applied at the first/last student boundary
+
+  // Crosses as many thresholds as the current pointer position allows (handles
+  // fast flicks that jump past more than one student in a single move event),
+  // rebasing baseX each time so the remaining offset is the leftover drag past
+  // the last step. Stops at the first/last student instead of wrapping.
+  const consumeSteps = (clientX) => {
+    let delta = clientX - baseX;
+    while (true) {
+      const blockedForward = currentIndex === students.length - 1 && delta < 0;
+      const blockedBackward = currentIndex === 0 && delta > 0;
+      if (blockedForward || blockedBackward) break;
+
+      if (delta <= -dragThreshold) {
+        goTo(currentIndex + 1);
+        baseX -= dragThreshold;
+      } else if (delta >= dragThreshold) {
+        goTo(currentIndex - 1);
+        baseX += dragThreshold;
+      } else {
+        break;
+      }
+      delta = clientX - baseX;
+    }
+    return delta;
+  };
+
+  const applyOffset = (delta) => {
+    const atBoundary =
+      (currentIndex === students.length - 1 && delta < 0) || (currentIndex === 0 && delta > 0);
+    const damping = atBoundary ? followFactor * resistFactor : followFactor;
+    const work = getWork(currentIndex, currentType);
+    galleryImage.style.transform = `translateX(${delta * damping}px) rotate(${getRotate(work)}deg)`;
+  };
 
   const onDown = (e) => {
     dragging = true;
     startX = e.clientX;
+    baseX = e.clientX;
     dragStage.classList.add("dragging");
     dragStage.setPointerCapture(e.pointerId);
   };
 
   const onMove = (e) => {
     if (!dragging) return;
-    const delta = e.clientX - startX;
-    const work = getWork(currentIndex, currentType);
-    const rotate = getRotate(work);
-    galleryImage.style.transform = `translateX(${delta * 0.3}px) rotate(${rotate}deg)`;
+    applyOffset(consumeSteps(e.clientX));
   };
 
   const onUp = (e) => {
@@ -190,17 +224,16 @@ function setupDrag() {
     dragging = false;
     dragStage.classList.remove("dragging");
 
-    const delta = e.clientX - startX;
+    consumeSteps(e.clientX);
+    const totalDelta = e.clientX - startX;
     const work = getWork(currentIndex, currentType);
 
-    if (Math.abs(delta) < clickThreshold) {
+    if (Math.abs(totalDelta) < clickThreshold) {
       galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
       openModal(work);
       return;
     }
-    if (delta <= -dragThreshold) goTo(currentIndex + 1);
-    else if (delta >= dragThreshold) goTo(currentIndex - 1);
-    else galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
+    galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
   };
 
   dragStage.addEventListener("pointerdown", onDown);
