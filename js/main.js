@@ -19,8 +19,16 @@ const modalImage1 = document.getElementById("modal-image-1");
 const modalImage2 = document.getElementById("modal-image-2");
 const modalText = document.getElementById("modal-text");
 
+const siteSearch = document.getElementById("site-search");
+const searchInput = document.getElementById("search-input");
+const searchResults = document.getElementById("search-results");
+
 function pad(n) {
   return String(n).padStart(2, "0");
+}
+
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
 function showView(name) {
@@ -193,6 +201,66 @@ function setupDrag() {
   });
 }
 
+function findSnippet(text, query) {
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return null;
+  const start = Math.max(0, idx - 20);
+  const end = Math.min(text.length, idx + query.length + 20);
+  return (start > 0 ? "…" : "") + text.slice(start, end) + (end < text.length ? "…" : "");
+}
+
+function runSearch(query) {
+  const q = query.trim();
+  if (!q) {
+    searchResults.hidden = true;
+    searchResults.innerHTML = "";
+    return;
+  }
+
+  const matches = students
+    .map((s, i) => ({ index: i, snippet: findSnippet(s.text || "", q) }))
+    .filter((m) => m.snippet !== null);
+
+  searchResults.innerHTML = matches.length
+    ? matches
+        .map(
+          (m) => `
+            <button type="button" data-index="${m.index}">
+              <span class="result-name">${escapeHtml(studentLabel(m.index))}</span>
+              <span class="result-snippet">${escapeHtml(m.snippet)}</span>
+            </button>
+          `
+        )
+        .join("")
+    : `<div class="result-empty">검색 결과가 없습니다</div>`;
+
+  searchResults.querySelectorAll("button[data-index]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const index = Number(btn.dataset.index);
+      showView("gallery");
+      goTo(index);
+      openModal(students[index]);
+      searchResults.hidden = true;
+      searchInput.value = "";
+    });
+  });
+
+  searchResults.hidden = false;
+}
+
+function setupSearch() {
+  searchInput.addEventListener("input", (e) => runSearch(e.target.value));
+  searchInput.addEventListener("focus", (e) => {
+    if (e.target.value.trim()) searchResults.hidden = false;
+  });
+  document.addEventListener("click", (e) => {
+    if (!siteSearch.contains(e.target)) searchResults.hidden = true;
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") searchResults.hidden = true;
+  });
+}
+
 function setupNav() {
   document.querySelectorAll("[data-view]").forEach((el) => {
     el.addEventListener("click", () => {
@@ -213,6 +281,7 @@ async function init() {
   setupNav();
   setupModal();
   setupViewerTabs();
+  setupSearch();
   showView("gallery");
 }
 
