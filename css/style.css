@@ -354,4 +354,13 @@ main {
     height: auto;
     overflow-y: visible;
   }
+
+  .site-search input {
+    width: 110px;
+    font-size: 13px;
+  }
+
+  .search-results {
+    width: min(280px, 90vw);
+  }
 }
