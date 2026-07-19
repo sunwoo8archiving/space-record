@@ -125,12 +125,10 @@ function setupModal() {
 
 function setupDrag() {
   let startX = 0; // fixed at pointerdown, used only to detect a "click" (no real drag)
-  let baseX = 0; // rebased every time a step is consumed, used for the visual offset
+  let baseX = 0; // rebased every time a step is consumed
   let dragging = false;
   const dragThreshold = 60;
   const clickThreshold = 5;
-  const followFactor = 0.3;
-  const resistFactor = 0.3; // extra damping applied at the first/last student boundary
 
   // Crosses as many thresholds as the current pointer position allows (handles
   // fast flicks that jump past more than one student in a single move event),
@@ -157,14 +155,6 @@ function setupDrag() {
     return delta;
   };
 
-  const applyOffset = (delta) => {
-    const atBoundary =
-      (currentIndex === students.length - 1 && delta < 0) || (currentIndex === 0 && delta > 0);
-    const damping = atBoundary ? followFactor * resistFactor : followFactor;
-    const work = getWork(currentIndex, currentType);
-    galleryImage.style.transform = `translateX(${delta * damping}px) rotate(${getRotate(work)}deg)`;
-  };
-
   const onDown = (e) => {
     dragging = true;
     startX = e.clientX;
@@ -175,7 +165,7 @@ function setupDrag() {
 
   const onMove = (e) => {
     if (!dragging) return;
-    applyOffset(consumeSteps(e.clientX));
+    consumeSteps(e.clientX);
   };
 
   const onUp = (e) => {
@@ -185,14 +175,10 @@ function setupDrag() {
 
     consumeSteps(e.clientX);
     const totalDelta = e.clientX - startX;
-    const work = getWork(currentIndex, currentType);
 
     if (Math.abs(totalDelta) < clickThreshold) {
-      galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
       openModal(students[currentIndex]);
-      return;
     }
-    galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
   };
 
   dragStage.addEventListener("pointerdown", onDown);
