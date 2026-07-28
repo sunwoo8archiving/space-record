@@ -141,19 +141,15 @@ function setupDrag() {
   // Crosses as many thresholds as the current pointer position allows (handles
   // fast flicks that jump past more than one student in a single move event),
   // rebasing baseX each time so the remaining offset is the leftover drag past
-  // the last step. Stops at the first/last student instead of wrapping.
+  // the last step. Wraps around at the first/last student (19 -> 01, 01 -> 19).
   const consumeSteps = (clientX) => {
     let delta = clientX - baseX;
     while (true) {
-      const blockedForward = currentIndex === students.length - 1 && delta < 0;
-      const blockedBackward = currentIndex === 0 && delta > 0;
-      if (blockedForward || blockedBackward) break;
-
       if (delta <= -dragThreshold) {
-        goTo(currentIndex + 1);
+        goTo((currentIndex + 1) % students.length);
         baseX -= dragThreshold;
       } else if (delta >= dragThreshold) {
-        goTo(currentIndex - 1);
+        goTo((currentIndex - 1 + students.length) % students.length);
         baseX += dragThreshold;
       } else {
         break;
