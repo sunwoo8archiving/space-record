@@ -18,6 +18,23 @@ const modalClose = document.getElementById("modal-close");
 const modalImage1 = document.getElementById("modal-image-1");
 const modalImage2 = document.getElementById("modal-image-2");
 const modalText = document.getElementById("modal-text");
+const modalTranslate = document.getElementById("modal-translate");
+
+// Runes + hanja, purely decorative - each character deterministically maps to
+// one of these so the "cipher" always reads the same way, like a secret script.
+const CIPHER_SYMBOLS = "ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚻᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛝᛞᛟ無心月花風雲山水火木金土日星辰龍鳳夢眠花";
+let modalPlainText = "";
+let modalRevealed = false;
+
+function toCipher(text) {
+  return text.replace(/\S/g, (ch) => CIPHER_SYMBOLS[ch.codePointAt(0) % CIPHER_SYMBOLS.length]);
+}
+
+function renderModalText() {
+  modalText.textContent = modalRevealed ? modalPlainText : toCipher(modalPlainText);
+  modalText.classList.toggle("encoded", !modalRevealed);
+  modalTranslate.textContent = modalRevealed ? "숨기기" : "번역";
+}
 
 const siteSearch = document.getElementById("site-search");
 const searchInput = document.getElementById("search-input");
@@ -113,7 +130,9 @@ function openModal(student) {
   modalImage1.alt = "우주선";
   modalImage2.src = spacesuit ? spacesuit.image : "images/placeholder.svg";
   modalImage2.alt = "우주복";
-  modalText.textContent = student.text || "";
+  modalPlainText = student.text || "";
+  modalRevealed = false;
+  renderModalText();
   modalOverlay.hidden = false;
 }
 
@@ -128,6 +147,10 @@ function setupModal() {
   });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !modalOverlay.hidden) closeModal();
+  });
+  modalTranslate.addEventListener("click", () => {
+    modalRevealed = !modalRevealed;
+    renderModalText();
   });
 }
 

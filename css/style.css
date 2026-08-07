@@ -321,15 +321,42 @@ main {
   min-height: 0;
 }
 
-.modal-text {
+.modal-text-panel {
   grid-row: 1;
   grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   height: 100%;
+  min-height: 0;
+}
+
+.modal-translate {
+  align-self: flex-start;
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid var(--muted);
+  border-radius: 12px;
+  padding: 4px 12px;
+}
+
+.modal-translate:hover {
+  color: var(--fg);
+  border-color: var(--fg);
+}
+
+.modal-text {
+  flex: 1;
   min-height: 0;
   overflow-y: auto;
   white-space: pre-line;
   font-size: 14px;
   padding-right: 8px;
+  transition: letter-spacing 0.15s ease;
+}
+
+.modal-text.encoded {
+  letter-spacing: 0.12em;
 }
 
 @media (max-width: 720px) {
@@ -348,6 +375,10 @@ main {
   .modal-images img {
     flex: none;
     aspect-ratio: 4 / 3;
+  }
+
+  .modal-text-panel {
+    height: auto;
   }
 
   .modal-text {
