@@ -101,7 +101,7 @@ function applyRevealState() {
   renderMarquee();
   renderModalText();
   if (searchInput.value.trim()) runSearch(searchInput.value);
-  revealToggle.textContent = siteRevealed ? "외계어" : "언어";
+  revealToggle.textContent = siteRevealed ? toCipher("외계어") : "언어";
 }
 
 function setupRevealToggle() {
@@ -343,7 +343,7 @@ async function init() {
   students = await res.json();
   applyCipherStatic();
   searchInput.placeholder = displayText("Search");
-  revealToggle.textContent = siteRevealed ? "외계어" : "언어";
+  revealToggle.textContent = siteRevealed ? toCipher("외계어") : "언어";
   renderMarquee();
   renderGallery();
   setupDrag();
