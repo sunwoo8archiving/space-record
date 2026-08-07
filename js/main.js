@@ -18,27 +18,41 @@ const modalClose = document.getElementById("modal-close");
 const modalImage1 = document.getElementById("modal-image-1");
 const modalImage2 = document.getElementById("modal-image-2");
 const modalText = document.getElementById("modal-text");
-const modalTranslate = document.getElementById("modal-translate");
+
+const siteSearch = document.getElementById("site-search");
+const searchInput = document.getElementById("search-input");
+const searchResults = document.getElementById("search-results");
+const revealToggle = document.getElementById("reveal-toggle");
 
 // Runes + hanja, purely decorative - each character deterministically maps to
 // one of these so the "cipher" always reads the same way, like a secret script.
 const CIPHER_SYMBOLS = "ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚻᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛝᛞᛟ無心月花風雲山水火木金土日星辰龍鳳夢眠花";
 let modalPlainText = "";
-let modalRevealed = false;
+let siteRevealed = false; // global: false = whole site shows as cipher text
 
 function toCipher(text) {
   return text.replace(/\S/g, (ch) => CIPHER_SYMBOLS[ch.codePointAt(0) % CIPHER_SYMBOLS.length]);
 }
 
-function renderModalText() {
-  modalText.textContent = modalRevealed ? modalPlainText : toCipher(modalPlainText);
-  modalText.classList.toggle("encoded", !modalRevealed);
-  modalTranslate.textContent = modalRevealed ? "숨기기" : "번역";
+// Every piece of visible text should route through this so one toggle covers
+// the whole site instead of each part managing its own hidden/shown state.
+function displayText(text) {
+  return siteRevealed ? text : toCipher(text);
 }
 
-const siteSearch = document.getElementById("site-search");
-const searchInput = document.getElementById("search-input");
-const searchResults = document.getElementById("search-results");
+function renderModalText() {
+  modalText.textContent = displayText(modalPlainText);
+  modalText.classList.toggle("encoded", !siteRevealed);
+}
+
+// Static HTML text (marked with [data-cipher]) - stash the real text once,
+// then re-derive the displayed text from that stash every time state flips.
+function applyCipherStatic() {
+  document.querySelectorAll("[data-cipher]").forEach((el) => {
+    if (el.dataset.plain === undefined) el.dataset.plain = el.textContent;
+    el.textContent = displayText(el.dataset.plain);
+  });
+}
 
 function pad(n) {
   return String(n).padStart(2, "0");
@@ -48,16 +62,46 @@ function escapeHtml(str) {
   return str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+function currentViewName() {
+  return Object.keys(views).find((key) => !views[key].hidden);
+}
+
+function updateNavLabels() {
+  const name = currentViewName();
+  document.querySelectorAll(".site-nav [data-view]").forEach((btn) => {
+    const isActive = btn.dataset.view === name;
+    btn.classList.toggle("active", isActive);
+    btn.textContent = displayText(isActive ? "Close" : btn.dataset.label);
+  });
+}
+
 function showView(name) {
   Object.entries(views).forEach(([key, el]) => {
     el.hidden = key !== name;
   });
-  document.querySelectorAll(".site-nav [data-view]").forEach((btn) => {
-    const isActive = btn.dataset.view === name;
-    btn.classList.toggle("active", isActive);
-    btn.textContent = isActive ? "Close" : btn.dataset.label;
-  });
+  updateNavLabels();
   if (name === "gallery") renderGallery();
+}
+
+// Re-derives every visible piece of text on the page from the current
+// siteRevealed state. The reveal-toggle button's own label is the one
+// exception - it stays legible always, since it's the key to the puzzle.
+function applyRevealState() {
+  applyCipherStatic();
+  searchInput.placeholder = displayText("Search");
+  updateNavLabels();
+  renderGallery();
+  renderMarquee();
+  renderModalText();
+  if (searchInput.value.trim()) runSearch(searchInput.value);
+  revealToggle.textContent = siteRevealed ? "숨기기" : "번역";
+}
+
+function setupRevealToggle() {
+  revealToggle.addEventListener("click", () => {
+    siteRevealed = !siteRevealed;
+    applyRevealState();
+  });
 }
 
 function getWork(index, type) {
@@ -72,7 +116,8 @@ function getRotate(work) {
 function studentLabel(index) {
   const student = students[index];
   const name = student ? student.student : "";
-  return name && name !== "학생 이름 입력" ? name : pad(index + 1);
+  const label = name && name !== "학생 이름 입력" ? name : pad(index + 1);
+  return displayText(label);
 }
 
 function renderGallery() {
@@ -82,8 +127,8 @@ function renderGallery() {
   galleryImage.src = work ? work.image : "images/placeholder.svg";
   galleryImage.alt = work ? work.title : "";
   galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
-  viewerStudent.textContent = student ? student.student : "";
-  counter.textContent = `${pad(currentIndex + 1)} / ${pad(students.length)}`;
+  viewerStudent.textContent = displayText(student ? student.student : "");
+  counter.textContent = displayText(`${pad(currentIndex + 1)} / ${pad(students.length)}`);
 
   viewerTabs.querySelectorAll("button").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.type === currentType);
@@ -131,7 +176,6 @@ function openModal(student) {
   modalImage2.src = spacesuit ? spacesuit.image : "images/placeholder.svg";
   modalImage2.alt = "우주복";
   modalPlainText = student.text || "";
-  modalRevealed = false;
   renderModalText();
   modalOverlay.hidden = false;
 }
@@ -147,10 +191,6 @@ function setupModal() {
   });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !modalOverlay.hidden) closeModal();
-  });
-  modalTranslate.addEventListener("click", () => {
-    modalRevealed = !modalRevealed;
-    renderModalText();
   });
 }
 
@@ -246,12 +286,12 @@ function runSearch(query) {
           (m) => `
             <button type="button" data-index="${m.index}">
               <span class="result-name">${escapeHtml(studentLabel(m.index))}</span>
-              <span class="result-snippet">${escapeHtml(m.snippet)}</span>
+              <span class="result-snippet">${escapeHtml(displayText(m.snippet))}</span>
             </button>
           `
         )
         .join("")
-    : `<div class="result-empty">검색 결과가 없습니다</div>`;
+    : `<div class="result-empty">${escapeHtml(displayText("검색 결과가 없습니다"))}</div>`;
 
   searchResults.querySelectorAll("button[data-index]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -294,6 +334,9 @@ function setupNav() {
 async function init() {
   const res = await fetch("data/works.json", { cache: "no-store" });
   students = await res.json();
+  applyCipherStatic();
+  searchInput.placeholder = displayText("Search");
+  revealToggle.textContent = siteRevealed ? "숨기기" : "번역";
   renderMarquee();
   renderGallery();
   setupDrag();
@@ -301,6 +344,7 @@ async function init() {
   setupModal();
   setupViewerTabs();
   setupSearch();
+  setupRevealToggle();
   showView("gallery");
 }
 

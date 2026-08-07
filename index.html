@@ -9,8 +9,8 @@
 <body>
   <header class="site-header">
     <div class="viewer-tabs" id="viewer-tabs">
-      <button data-type="spaceship" type="button">Ship</button>
-      <button data-type="spacesuit" type="button">Suit</button>
+      <button data-type="spaceship" data-cipher type="button">Ship</button>
+      <button data-type="spacesuit" data-cipher type="button">Suit</button>
     </div>
     <div class="site-search" id="site-search">
       <input type="search" id="search-input" placeholder="Search" autocomplete="off">
@@ -34,11 +34,12 @@
         <span id="viewer-student"></span>
       </div>
       <div class="counter" id="counter"></div>
+      <button class="reveal-toggle" id="reveal-toggle" type="button">번역</button>
     </section>
 
     <section id="view-info" class="view view-info" hidden>
       <button class="view-close" id="info-close" type="button" aria-label="Close">&times;</button>
-      <p>Dongbuk 프로젝트 소개 텍스트를 여기에 작성하세요.</p>
+      <p data-cipher>Dongbuk 프로젝트 소개 텍스트를 여기에 작성하세요.</p>
     </section>
   </main>
 
@@ -49,10 +50,7 @@
         <img id="modal-image-1" src="" alt="">
         <img id="modal-image-2" src="" alt="">
       </div>
-      <div class="modal-text-panel">
-        <button class="modal-translate" id="modal-translate" type="button">번역</button>
-        <div class="modal-text" id="modal-text"></div>
-      </div>
+      <div class="modal-text" id="modal-text"></div>
     </div>
   </div>
 
