@@ -30,10 +30,11 @@ const revealToggle = document.getElementById("reveal-toggle");
 // UTF-16 code units - built from real, contiguously-assigned code points
 // (U+13000 onward) and split with Array.from so indexing lands on whole
 // characters instead of stray surrogate halves.
-const HIEROGLYPHS = Array.from({ length: 24 }, (_, i) => String.fromCodePoint(0x13000 + i)).join("");
-const CIPHER_SYMBOLS = Array.from(
-  "ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚻᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛝᛞᛟ無心月花風雲山水火木金土日星辰龍鳳夢眠花" + HIEROGLYPHS
-);
+const HIEROGLYPHS = Array.from({ length: 8 }, (_, i) => String.fromCodePoint(0x13000 + i)).join("");
+// Deliberately obscure hanja (not everyday-use characters) so the cipher
+// isn't easy to half-read at a glance.
+const HANJA = "饕餮狻猊魍魎蛟鵬曦翳黝矍彧昶玥奭龘";
+const CIPHER_SYMBOLS = Array.from("ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚻᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛝᛞᛟ" + HANJA + HIEROGLYPHS);
 let modalPlainText = "";
 let siteRevealed = false; // global: false = whole site shows as cipher text
 
