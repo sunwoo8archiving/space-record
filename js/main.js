@@ -26,7 +26,14 @@ const revealToggle = document.getElementById("reveal-toggle");
 
 // Runes + hanja, purely decorative - each character deterministically maps to
 // one of these so the "cipher" always reads the same way, like a secret script.
-const CIPHER_SYMBOLS = "ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚻᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛝᛞᛟ無心月花風雲山水火木金土日星辰龍鳳夢眠花";
+// Hieroglyphs live outside the Basic Multilingual Plane, so each one is 2
+// UTF-16 code units - built from real, contiguously-assigned code points
+// (U+13000 onward) and split with Array.from so indexing lands on whole
+// characters instead of stray surrogate halves.
+const HIEROGLYPHS = Array.from({ length: 24 }, (_, i) => String.fromCodePoint(0x13000 + i)).join("");
+const CIPHER_SYMBOLS = Array.from(
+  "ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚻᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛝᛞᛟ無心月花風雲山水火木金土日星辰龍鳳夢眠花" + HIEROGLYPHS
+);
 let modalPlainText = "";
 let siteRevealed = false; // global: false = whole site shows as cipher text
 
