@@ -5,6 +5,7 @@ let currentType = "spaceship";
 const galleryImage = document.getElementById("gallery-image");
 const viewerStudent = document.getElementById("viewer-student");
 const viewerTabs = document.getElementById("viewer-tabs");
+const viewerMarquee = document.getElementById("viewer-marquee");
 const viewerMarqueeTrack = document.getElementById("viewer-marquee-track");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
@@ -151,12 +152,49 @@ function renderMarquee() {
   const items = students
     .map((_, i) => `<button data-index="${i}" type="button">${studentLabel(i)}</button>`)
     .join("");
-  // duplicated so the -50% translateX loop is seamless
+  // duplicated so wrapping the scroll position at the halfway point is seamless
   viewerMarqueeTrack.innerHTML = items + items;
 
   viewerMarqueeTrack.querySelectorAll("button").forEach((btn) => {
     btn.addEventListener("click", () => goTo(Number(btn.dataset.index)));
   });
+}
+
+// Drives the marquee scroll from JS with requestAnimationFrame instead of a
+// CSS "infinite" keyframe animation. CSS animations that loop forever can
+// stutter or blank out right at the restart point in some browsers (a known
+// compositor/repaint quirk) - computing the offset ourselves every frame and
+// wrapping it with modulo never "restarts" anything, so there's no seam for
+// that bug to happen at.
+function setupMarqueeAnimation() {
+  const speed = 56; // px per second, roughly matching the old 30s per loop
+  let paused = false;
+  let lastTime = null;
+  let offset = 0;
+
+  viewerMarquee.addEventListener("mouseenter", () => {
+    paused = true;
+  });
+  viewerMarquee.addEventListener("mouseleave", () => {
+    paused = false;
+  });
+
+  function frame(timestamp) {
+    if (lastTime === null) lastTime = timestamp;
+    // Clamp so a backgrounded/throttled tab doesn't produce one huge jump
+    // in offset when it comes back into view.
+    const dt = Math.min((timestamp - lastTime) / 1000, 0.1);
+    lastTime = timestamp;
+
+    const halfWidth = viewerMarqueeTrack.scrollWidth / 2;
+    if (!paused && halfWidth > 0) {
+      offset = (offset + speed * dt) % halfWidth;
+      viewerMarqueeTrack.style.transform = `translateX(${-offset}px)`;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
 }
 
 function goTo(index) {
@@ -353,6 +391,7 @@ async function init() {
   setupViewerTabs();
   setupSearch();
   setupRevealToggle();
+  setupMarqueeAnimation();
   showView("gallery");
 }
 

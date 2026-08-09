@@ -213,11 +213,7 @@ main {
 .viewer-marquee-track {
   display: inline-flex;
   gap: 32px;
-  animation: marquee 30s linear infinite;
-}
-
-.viewer-marquee:hover .viewer-marquee-track {
-  animation-play-state: paused;
+  will-change: transform;
 }
 
 .viewer-marquee-track button {
@@ -229,15 +225,6 @@ main {
 .viewer-marquee-track button.active {
   color: var(--fg);
   font-weight: 600;
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 .drag-stage {
