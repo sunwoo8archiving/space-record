@@ -29,7 +29,21 @@
       </div>
       <div class="drag-stage" id="drag-stage">
         <div class="gallery-float" id="gallery-float">
-          <img id="gallery-image" src="" alt="" draggable="false">
+          <div class="lens-wrap" id="lens-wrap">
+            <div class="porthole-halo" id="porthole-halo">
+              <img id="gallery-image-halo" src="" alt="" draggable="false">
+            </div>
+            <div class="barrel"></div>
+            <div class="ticks" id="ticks"></div>
+            <div class="indicator-rotor" id="indicator"><div class="indicator"></div></div>
+            <div class="porthole" id="porthole">
+              <canvas class="dust-canvas dust-back" id="dust-back"></canvas>
+              <img id="gallery-image" src="" alt="" draggable="false">
+              <canvas class="dust-canvas dust-front" id="dust-front"></canvas>
+              <div class="focus-ring"></div>
+            </div>
+            <div class="grip-hit" id="grip-hit"></div>
+          </div>
         </div>
       </div>
       <div class="viewer-caption">

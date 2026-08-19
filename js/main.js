@@ -1,6 +1,8 @@
 let students = [];
 let currentIndex = 0;
 let currentType = "spaceship";
+let lensTiltDeg = 0; // current work's per-student rotate() from works.json
+let currentLensSrc = null; // last image src loaded into the lens, so renderGallery() only resets zoom/pan when the artwork actually changes
 
 const galleryImage = document.getElementById("gallery-image");
 const viewerStudent = document.getElementById("viewer-student");
@@ -10,6 +12,14 @@ const viewerMarqueeTrack = document.getElementById("viewer-marquee-track");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
 const galleryFloat = document.getElementById("gallery-float");
+const lensWrap = document.getElementById("lens-wrap");
+const galleryImageHalo = document.getElementById("gallery-image-halo");
+const ticksWrap = document.getElementById("ticks");
+const indicator = document.getElementById("indicator");
+const porthole = document.getElementById("porthole");
+const gripHit = document.getElementById("grip-hit");
+const dustBackCanvas = document.getElementById("dust-back");
+const dustFrontCanvas = document.getElementById("dust-front");
 const views = {
   gallery: document.getElementById("view-gallery"),
   info: document.getElementById("view-info"),
@@ -134,9 +144,19 @@ function renderGallery() {
   const student = students[currentIndex];
   const work = getWork(currentIndex, currentType);
 
-  galleryImage.src = work ? work.image : "images/placeholder.svg";
+  const src = work ? work.image : "images/placeholder.svg";
+  // renderGallery() also re-runs for things that don't change the artwork
+  // itself (toggling the cipher/reveal text, a window resize) - only reset
+  // the dial's zoom/pan when the image actually changes underneath it, or
+  // toggling "언어" mid-zoom would yank it back to 1x for no reason.
+  if (src !== currentLensSrc) {
+    currentLensSrc = src;
+    galleryImage.src = src;
+    galleryImageHalo.src = src; // kept in sync for the glass halo (see setupLensDial)
+    lensTiltDeg = getRotate(work);
+    resetLens();
+  }
   galleryImage.alt = work ? work.title : "";
-  galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
   viewerStudent.textContent = displayText(student ? student.student : "");
   counter.textContent = displayText(`${pad(currentIndex + 1)} / ${pad(students.length)}`);
 
@@ -269,11 +289,9 @@ function setupModal() {
 // Moving between students is keyboard-only now (arrow keys) - dragging used
 // to swipe between them, but that gesture is earmarked for the zoom dial
 // instead, so the image area is just a click target for the detail modal.
+// Clicking to open the detail modal now happens on the lens glass itself
+// (see setupLensDial's pan handler, which opens it on an undragged click).
 function setupGalleryInteraction() {
-  dragStage.addEventListener("click", () => {
-    openModal(students[currentIndex]);
-  });
-
   document.addEventListener("keydown", (e) => {
     if (views.gallery.hidden) return;
     if (e.key === "ArrowRight") goTo(currentIndex + 1);
@@ -285,83 +303,18 @@ function setupGalleryInteraction() {
 // style.css), which stops with a little startled wobble when the cursor
 // lands on it and resumes drifting once the cursor leaves.
 //
-// The source PNGs are 1536x1024 canvases with a lot of transparent margin
-// around the actual artwork, so "the cursor is over the image element"
-// covers a much bigger area than "the cursor is over something visible" -
-// reacting to the empty margin felt wrong. alphaHitTest reads the drawn
-// image's pixels once per image load and looks up the alpha at the cursor's
-// position, so hovering only counts where the artwork is actually opaque.
-const alphaCanvas = document.createElement("canvas");
-const alphaCtx = alphaCanvas.getContext("2d", { willReadFrequently: true });
-let alphaData = null; // cached Uint8ClampedArray from getImageData, or null until ready
-
-function buildAlphaMap() {
-  alphaData = null;
-  const w = galleryImage.naturalWidth;
-  const h = galleryImage.naturalHeight;
-  if (!w || !h) return;
-  // Downscaled - this is only ever used for a coarse "is there art here"
-  // lookup, not pixel-perfect hit testing, so a small canvas keeps every
-  // mousemove lookup cheap.
-  const scale = Math.min(1, 200 / Math.max(w, h));
-  alphaCanvas.width = Math.max(1, Math.round(w * scale));
-  alphaCanvas.height = Math.max(1, Math.round(h * scale));
-  try {
-    alphaCtx.clearRect(0, 0, alphaCanvas.width, alphaCanvas.height);
-    alphaCtx.drawImage(galleryImage, 0, 0, alphaCanvas.width, alphaCanvas.height);
-    alphaData = alphaCtx.getImageData(0, 0, alphaCanvas.width, alphaCanvas.height).data;
-  } catch (err) {
-    alphaData = null; // e.g. a tainted canvas - fall back to the full box
-  }
-}
-
-// The element's own current rotation angle in degrees, read back from its
-// computed transform matrix - used because the image can be rotated twice
-// over (its own per-student tilt, nested inside the wrapper's animated
-// drift), and getComputedStyle only ever reports one element's own matrix.
-function getRotationDeg(el) {
-  const value = getComputedStyle(el).transform;
-  if (!value || value === "none") return 0;
-  const m = new DOMMatrix(value);
-  return Math.atan2(m.b, m.a) * (180 / Math.PI);
-}
-
-function isOverArtwork(clientX, clientY) {
-  // offsetWidth/Height are the element's own layout box, unaffected by any
-  // transform on it or its ancestors - since the <img> has no fixed
-  // width/height (only max-width/max-height), this box already exactly
-  // matches the rendered artwork, with no separate letterboxing to account
-  // for.
-  const renderW = galleryImage.offsetWidth;
-  const renderH = galleryImage.offsetHeight;
-  if (renderW <= 0 || renderH <= 0) return false;
-
-  // getBoundingClientRect gives the on-screen (rotated) box, but its center
-  // point is still exactly where the image's own center currently is,
-  // regardless of rotation - rotating a box about its center never moves
-  // the center.
-  const rect = galleryImage.getBoundingClientRect();
+// The lens is now a fixed circular frame (see setupLensDial), so "hovering
+// the piece" just means being within the ring's own hit radius - no more
+// need to sample the PNG's alpha channel the way a free-floating,
+// irregularly-shaped image used to require.
+function isOverLens(clientX, clientY) {
+  const rect = lensWrap.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
-
-  // Un-rotate the cursor's offset from that center by the image's total
-  // current rotation (its own per-student tilt plus whatever angle the
-  // idle-drift animation is at right now on the wrapper), landing back in
-  // the image's own unrotated pixel grid.
-  const totalDeg = getRotationDeg(galleryFloat) + getRotationDeg(galleryImage);
-  const rad = (-totalDeg * Math.PI) / 180;
   const dx = clientX - cx;
   const dy = clientY - cy;
-  const localX = dx * Math.cos(rad) - dy * Math.sin(rad) + renderW / 2;
-  const localY = dx * Math.sin(rad) + dy * Math.cos(rad) + renderH / 2;
-
-  if (localX < 0 || localY < 0 || localX > renderW || localY > renderH) return false;
-  if (!alphaData) return true; // not ready yet - don't block the interaction
-
-  const px = Math.min(alphaCanvas.width - 1, Math.floor((localX / renderW) * alphaCanvas.width));
-  const py = Math.min(alphaCanvas.height - 1, Math.floor((localY / renderH) * alphaCanvas.height));
-  const alpha = alphaData[(py * alphaCanvas.width + px) * 4 + 3];
-  return alpha > 10;
+  const radius = rect.width / 2 + 42; // matches .grip-hit's outward inset
+  return dx * dx + dy * dy <= radius * radius;
 }
 
 function setupFloat() {
@@ -379,7 +332,7 @@ function setupFloat() {
   };
 
   const updateHover = (clientX, clientY) => {
-    const over = isOverArtwork(clientX, clientY);
+    const over = isOverLens(clientX, clientY);
     if (over === hovering) return;
     hovering = over;
     if (hovering) startSettle();
@@ -396,14 +349,360 @@ function setupFloat() {
   // moves the image.
   dragStage.addEventListener("pointerdown", startSettle);
 
-  galleryImage.addEventListener("load", buildAlphaMap);
-  if (galleryImage.complete) buildAlphaMap();
-
   galleryFloat.addEventListener("animationend", (e) => {
     if (e.animationName !== "float-settle") return;
     galleryFloat.classList.remove("settling");
     galleryFloat.classList.add("settled");
   });
+}
+
+// --- Lens dial: drag the ring to zoom (with click-stops), drag the glass
+// to pan, both clamped, with a glass halo and drifting dust for texture.
+// See the standalone prototype this was developed against for the design
+// notes; this is that same logic wired into the real gallery state.
+const DETENT_DEG = 20;
+const STOPS_PER_REV = 360 / DETENT_DEG; // 18 major stops
+const SUBTICKS_PER_GAP = 3;
+const FINE_PER_MAJOR = SUBTICKS_PER_GAP + 1; // 4
+const FINE_DEG = DETENT_DEG / FINE_PER_MAJOR; // 5deg
+const TOTAL_FINE = STOPS_PER_REV * FINE_PER_MAJOR; // 72
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 2.6;
+const ZOOM_PER_FINE = (MAX_ZOOM - MIN_ZOOM) / TOTAL_FINE; // one full turn = the whole range
+// Below this angular speed (deg/ms), turning is slow/deliberate enough to
+// click through the minor ticks too; at or above it, only the major stops
+// register, so a fast spin coasts smoothly past the fine steps instead of
+// stuttering through all 72 of them.
+const FINE_SPEED_THRESHOLD = 0.1;
+
+let lensTotalDeg = 0;
+let lensLastDetent = 0;
+let lensPanX = 0;
+let lensPanY = 0;
+let lensTargetZoom = MIN_ZOOM;
+let lensDisplayedZoom = MIN_ZOOM;
+let lensTargetBlur = 0;
+let lensDisplayedBlur = 0;
+let lensBlurTimer = null;
+const allTicks = []; // index 0..71 (fine units), one entry per tick mark
+
+function buildLensTicks() {
+  for (let i = 0; i < STOPS_PER_REV; i++) {
+    const slot = document.createElement("div");
+    slot.className = "tick-slot";
+    slot.style.transform = `rotate(${i * DETENT_DEG}deg)`;
+    const tick = document.createElement("div");
+    tick.className = "tick stop";
+    slot.appendChild(tick);
+    ticksWrap.appendChild(slot);
+    allTicks[i * FINE_PER_MAJOR] = tick;
+
+    for (let k = 1; k < FINE_PER_MAJOR; k++) {
+      const subSlot = document.createElement("div");
+      subSlot.className = "tick-slot";
+      subSlot.style.transform = `rotate(${i * DETENT_DEG + k * FINE_DEG}deg)`;
+      const sub = document.createElement("div");
+      sub.className = "tick";
+      subSlot.appendChild(sub);
+      ticksWrap.appendChild(subSlot);
+      allTicks[i * FINE_PER_MAJOR + k] = sub;
+    }
+  }
+}
+
+function flashLensTick(fineIndex) {
+  const i = ((fineIndex % TOTAL_FINE) + TOTAL_FINE) % TOTAL_FINE;
+  const el = allTicks[i];
+  el.classList.add("active");
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("active"), 220);
+}
+
+// TODO(sound): call a short "click" sample here once audio is wired up.
+function playDetentClick() {}
+
+// Resets the dial to its resting state whenever the artwork underneath it
+// changes (new student, new type) - zoom/pan on one piece shouldn't carry
+// over onto the next.
+function resetLens() {
+  lensTotalDeg = 0;
+  lensLastDetent = 0;
+  lensPanX = 0;
+  lensPanY = 0;
+  lensTargetZoom = MIN_ZOOM;
+  lensDisplayedZoom = MIN_ZOOM;
+  lensTargetBlur = 0;
+  lensDisplayedBlur = 0;
+  if (indicator) indicator.style.transform = "rotate(0deg)";
+}
+
+function setupLensDial() {
+  buildLensTicks();
+
+  // Paint the reset state (from the renderGallery() call that already ran
+  // during init) once synchronously, so the image doesn't flash at its
+  // untransformed top/left:50% position for a frame before the render
+  // loop below gets to it.
+  const initialTransform = `translate(-50%, -50%) rotate(${lensTiltDeg}deg) scale(${lensDisplayedZoom})`;
+  galleryImage.style.transform = initialTransform;
+  galleryImageHalo.style.transform = initialTransform;
+
+  let ringDragging = false;
+  let ringLastAngle = 0;
+  let ringLastMoveTime = 0;
+
+  function angleAt(clientX, clientY) {
+    const rect = lensWrap.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    return Math.atan2(clientY - cy, clientX - cx) * (180 / Math.PI);
+  }
+  function shortestDelta(from, to) {
+    let d = (to - from) % 360;
+    if (d > 180) d -= 360;
+    if (d < -180) d += 360;
+    return d;
+  }
+  function scheduleRefocus() {
+    clearTimeout(lensBlurTimer);
+    lensBlurTimer = setTimeout(() => {
+      lensTargetBlur = 0;
+    }, 100);
+  }
+
+  function onRingDown(e) {
+    ringDragging = true;
+    try {
+      gripHit.setPointerCapture(e.pointerId);
+    } catch (err) {}
+    ringLastAngle = angleAt(e.clientX, e.clientY);
+    ringLastMoveTime = performance.now();
+  }
+  function onRingMove(e) {
+    if (!ringDragging) return;
+    const now = performance.now();
+    const angle = angleAt(e.clientX, e.clientY);
+    const delta = shortestDelta(ringLastAngle, angle);
+    const dt = Math.max(1, now - ringLastMoveTime);
+    const speed = Math.abs(delta) / dt;
+
+    lensTotalDeg = Math.min(360, Math.max(0, lensTotalDeg + delta)); // hard stop: one full turn
+
+    const fineDetent = Math.round(lensTotalDeg / FINE_DEG);
+    const effectiveDetent =
+      speed < FINE_SPEED_THRESHOLD ? fineDetent : Math.round(fineDetent / FINE_PER_MAJOR) * FINE_PER_MAJOR;
+
+    if (effectiveDetent !== lensLastDetent) {
+      lensLastDetent = effectiveDetent;
+      indicator.style.transform = `rotate(${effectiveDetent * FINE_DEG}deg)`;
+      lensTargetZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, MIN_ZOOM + effectiveDetent * ZOOM_PER_FINE));
+      flashLensTick(effectiveDetent);
+      playDetentClick();
+    }
+
+    lensTargetBlur = Math.min(6, speed * 90);
+    scheduleRefocus();
+
+    ringLastAngle = angle;
+    ringLastMoveTime = now;
+  }
+  function onRingUp(e) {
+    if (!ringDragging) return;
+    ringDragging = false;
+    try {
+      gripHit.releasePointerCapture(e.pointerId);
+    } catch (err) {}
+    scheduleRefocus();
+  }
+
+  gripHit.addEventListener("pointerdown", onRingDown);
+  gripHit.addEventListener("pointermove", onRingMove);
+  gripHit.addEventListener("pointerup", onRingUp);
+  gripHit.addEventListener("pointercancel", onRingUp);
+
+  // --- pan (drag the glass itself, independent of the ring) ------------
+  let panDragging = false;
+  let panStartX = 0;
+  let panStartY = 0;
+  let panBaseX = 0;
+  let panBaseY = 0;
+  let panMoved = false;
+  const clickThreshold = 6;
+
+  function maxPanFor(zoom) {
+    const size = porthole.clientWidth || lensWrap.clientWidth;
+    const rendered = size * 1.32 * zoom;
+    return Math.max(0, (rendered - size) / 2);
+  }
+
+  function onPanDown(e) {
+    e.preventDefault();
+    panDragging = true;
+    panMoved = false;
+    porthole.classList.add("panning");
+    try {
+      porthole.setPointerCapture(e.pointerId);
+    } catch (err) {}
+    panStartX = e.clientX;
+    panStartY = e.clientY;
+    panBaseX = lensPanX;
+    panBaseY = lensPanY;
+  }
+  function onPanMove(e) {
+    if (!panDragging) return;
+    const dx = e.clientX - panStartX;
+    const dy = e.clientY - panStartY;
+    if (Math.abs(dx) > clickThreshold || Math.abs(dy) > clickThreshold) panMoved = true;
+    const limit = maxPanFor(lensDisplayedZoom);
+    lensPanX = Math.min(limit, Math.max(-limit, panBaseX + dx));
+    lensPanY = Math.min(limit, Math.max(-limit, panBaseY + dy));
+  }
+  function onPanUp(e) {
+    if (!panDragging) return;
+    panDragging = false;
+    porthole.classList.remove("panning");
+    try {
+      porthole.releasePointerCapture(e.pointerId);
+    } catch (err) {}
+    if (!panMoved) openModal(students[currentIndex]);
+  }
+
+  porthole.addEventListener("pointerdown", onPanDown);
+  porthole.addEventListener("pointermove", onPanMove);
+  porthole.addEventListener("pointerup", onPanUp);
+  porthole.addEventListener("pointercancel", onPanUp);
+  // Same fix as the rest of the gallery's drag surfaces - without this,
+  // dragging across the image starts a native text/image selection.
+  document.addEventListener("selectstart", (e) => {
+    if (panDragging) e.preventDefault();
+  });
+
+  function renderLoop() {
+    lensDisplayedZoom += (lensTargetZoom - lensDisplayedZoom) * 0.18;
+    lensDisplayedBlur += (lensTargetBlur - lensDisplayedBlur) * 0.25;
+    if (Math.abs(lensTargetBlur - lensDisplayedBlur) < 0.03) lensDisplayedBlur = lensTargetBlur;
+
+    const limit = maxPanFor(lensDisplayedZoom);
+    lensPanX = Math.min(limit, Math.max(-limit, lensPanX));
+    lensPanY = Math.min(limit, Math.max(-limit, lensPanY));
+
+    const t = `translate(calc(-50% + ${lensPanX.toFixed(1)}px), calc(-50% + ${lensPanY.toFixed(1)}px)) rotate(${lensTiltDeg}deg) scale(${lensDisplayedZoom.toFixed(4)})`;
+    galleryImage.style.transform = t;
+    galleryImageHalo.style.transform = t;
+    galleryImage.style.filter = lensDisplayedBlur > 0.03 ? `blur(${lensDisplayedBlur.toFixed(2)}px)` : "none";
+    porthole.classList.toggle("focusing", lensDisplayedBlur > 0.2);
+
+    requestAnimationFrame(renderLoop);
+  }
+  requestAnimationFrame(renderLoop);
+
+  setupDustLayers();
+}
+
+// Two independent particle layers - one painted before #gallery-image in
+// the DOM (so it sits behind it), one after (in front) - so the dust reads
+// as floating in space around the specimen instead of one flat sheet stuck
+// on top of the image. Fully code-generated (soft radial gradients, slow
+// random drift, a gentle per-particle twinkle) - no image or video asset
+// needed.
+function makeDustLayer(canvasEl, count) {
+  const ctx = canvasEl.getContext("2d");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let size = 0;
+  let particles = [];
+
+  function resize() {
+    const rect = porthole.getBoundingClientRect();
+    size = Math.max(1, Math.round(rect.width));
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvasEl.width = size * dpr;
+    canvasEl.height = size * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function makeParticles(n) {
+    const arr = [];
+    for (let i = 0; i < n; i++) {
+      const warm = Math.random() < 0.3;
+      arr.push({
+        x: Math.random() * size,
+        y: Math.random() * size,
+        r: 0.8 + Math.random() * 1.8,
+        vx: (Math.random() - 0.5) * 0.1,
+        vy: (Math.random() - 0.5) * 0.1,
+        baseAlpha: 0.28 + Math.random() * 0.38,
+        phase: Math.random() * Math.PI * 2,
+        freq: 0.4 + Math.random() * 0.5,
+        color: warm ? "216,168,110" : "255,255,255",
+      });
+    }
+    return arr;
+  }
+
+  function stepParticle(p, tSec) {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < -8) p.x = size + 8;
+    if (p.x > size + 8) p.x = -8;
+    if (p.y < -8) p.y = size + 8;
+    if (p.y > size + 8) p.y = -8;
+    return p.baseAlpha * (0.65 + 0.35 * Math.sin(tSec * p.freq + p.phase));
+  }
+
+  function draw(tSec) {
+    ctx.clearRect(0, 0, size, size);
+    for (const p of particles) {
+      const alpha = reduceMotion ? p.baseAlpha : stepParticle(p, tSec);
+
+      const halo = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.4);
+      halo.addColorStop(0, `rgba(30,28,24,${(alpha * 0.18).toFixed(3)})`);
+      halo.addColorStop(1, "rgba(30,28,24,0)");
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 2.4, 0, Math.PI * 2);
+      ctx.fill();
+
+      const core = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+      core.addColorStop(0, `rgba(${p.color},${alpha.toFixed(3)})`);
+      core.addColorStop(1, `rgba(${p.color},0)`);
+      ctx.fillStyle = core;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function loop(ts) {
+    draw(ts / 1000);
+    if (!reduceMotion) requestAnimationFrame(loop);
+  }
+
+  function init() {
+    resize();
+    particles = makeParticles(count);
+    draw(0);
+    if (!reduceMotion) requestAnimationFrame(loop);
+  }
+
+  return { init };
+}
+
+function setupDustLayers() {
+  const dustBackLayer = makeDustLayer(dustBackCanvas, 26);
+  const dustFrontLayer = makeDustLayer(dustFrontCanvas, 34);
+
+  function initDust() {
+    dustBackLayer.init();
+    dustFrontLayer.init();
+  }
+
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(initDust, 200);
+  });
+
+  initDust();
 }
 
 function findSnippet(text, query) {
@@ -486,6 +785,7 @@ async function init() {
   renderMarquee();
   renderGallery();
   setupGalleryInteraction();
+  setupLensDial();
   setupFloat();
   setupNav();
   setupModal();
