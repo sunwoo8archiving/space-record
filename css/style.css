@@ -270,12 +270,20 @@ main {
   transform: none;
 }
 
+/* Rotation peaks are offset from the translate peaks (different %
+   stops for each) rather than moving in lockstep with them, so the
+   tumble doesn't read as "drifts right AND tilts right, every time" -
+   closer to how something actually turning in zero gravity would drift
+   and spin on its own independent timing. */
 @keyframes float-drift {
   0% { transform: translate(0, 0) rotate(0deg); }
-  22% { transform: translate(24px, -34px) rotate(1.1deg); }
-  45% { transform: translate(-20px, 10px) rotate(-0.8deg); }
-  68% { transform: translate(18px, 30px) rotate(0.7deg); }
-  86% { transform: translate(-14px, -18px) rotate(-1deg); }
+  14% { transform: translate(15px, -22px) rotate(-1.4deg); }
+  29% { transform: translate(24px, -34px) rotate(0.6deg); }
+  41% { transform: translate(6px, -12px) rotate(2deg); }
+  53% { transform: translate(-20px, 10px) rotate(0.4deg); }
+  64% { transform: translate(-24px, 22px) rotate(-1.8deg); }
+  76% { transform: translate(18px, 30px) rotate(-0.3deg); }
+  90% { transform: translate(-14px, -18px) rotate(1.5deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
