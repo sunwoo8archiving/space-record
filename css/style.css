@@ -249,6 +249,52 @@ main {
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
+  display: block;
+}
+
+/* Weightless drift: a slow, irregular float so the artwork feels like it's
+   hanging in zero gravity rather than looping on an obvious cycle. Lives on
+   a wrapper around the image (not the image itself) so it composes cleanly
+   with the image's own per-student tilt (an inline rotate() set in JS)
+   instead of overwriting it - each element keeps its own transform. */
+.gallery-float {
+  animation: float-drift 10s ease-in-out infinite;
+}
+
+.gallery-float.settling {
+  animation: float-settle 0.7s cubic-bezier(0.36, 0, 0.66, -0.05) 1;
+}
+
+.gallery-float.settled {
+  animation: none;
+  transform: none;
+}
+
+@keyframes float-drift {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  22% { transform: translate(7px, -10px) rotate(0.7deg); }
+  45% { transform: translate(-6px, 3px) rotate(-0.5deg); }
+  68% { transform: translate(5px, 9px) rotate(0.4deg); }
+  86% { transform: translate(-4px, -5px) rotate(-0.6deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* A little startled shake that quickly decays to a dead stop - like the
+   drifting artwork got nudged by the cursor and settled in place. */
+@keyframes float-settle {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-6px, 4px) rotate(-1.6deg); }
+  40% { transform: translate(4px, -3px) rotate(1.2deg); }
+  60% { transform: translate(-2px, 2px) rotate(-0.6deg); }
+  80% { transform: translate(1px, -1px) rotate(0.25deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-float,
+  .gallery-float.settling {
+    animation: none;
+  }
 }
 
 .viewer-caption {

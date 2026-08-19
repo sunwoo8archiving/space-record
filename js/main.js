@@ -9,6 +9,7 @@ const viewerMarquee = document.getElementById("viewer-marquee");
 const viewerMarqueeTrack = document.getElementById("viewer-marquee-track");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
+const galleryFloat = document.getElementById("gallery-float");
 const views = {
   gallery: document.getElementById("view-gallery"),
   info: document.getElementById("view-info"),
@@ -348,6 +349,34 @@ function setupDrag() {
   });
 }
 
+// Weightless idle drift on the gallery image (see .gallery-float in
+// style.css), which stops with a little startled wobble when the cursor
+// lands on it and resumes drifting once the cursor leaves.
+function setupFloat() {
+  const startSettle = () => {
+    galleryFloat.classList.remove("settled");
+    if (!galleryFloat.classList.contains("settling")) {
+      galleryFloat.classList.add("settling");
+    }
+  };
+
+  const resumeDrift = () => {
+    galleryFloat.classList.remove("settling", "settled");
+  };
+
+  dragStage.addEventListener("mouseenter", startSettle);
+  dragStage.addEventListener("mouseleave", resumeDrift);
+  // Covers touch/pen input, which never fires mouseenter, so a drag started
+  // without hovering first still stops the drift before it moves the image.
+  dragStage.addEventListener("pointerdown", startSettle);
+
+  galleryFloat.addEventListener("animationend", (e) => {
+    if (e.animationName !== "float-settle") return;
+    galleryFloat.classList.remove("settling");
+    galleryFloat.classList.add("settled");
+  });
+}
+
 function findSnippet(text, query) {
   const idx = text.toLowerCase().indexOf(query.toLowerCase());
   if (idx === -1) return null;
@@ -428,6 +457,7 @@ async function init() {
   renderMarquee();
   renderGallery();
   setupDrag();
+  setupFloat();
   setupNav();
   setupModal();
   setupViewerTabs();
