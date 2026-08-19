@@ -258,11 +258,11 @@ main {
    with the image's own per-student tilt (an inline rotate() set in JS)
    instead of overwriting it - each element keeps its own transform. */
 .gallery-float {
-  animation: float-drift 10s ease-in-out infinite;
+  animation: float-drift 11s ease-in-out infinite;
 }
 
 .gallery-float.settling {
-  animation: float-settle 0.7s cubic-bezier(0.36, 0, 0.66, -0.05) 1;
+  animation: float-settle 1.4s ease-out 1;
 }
 
 .gallery-float.settled {
@@ -272,21 +272,22 @@ main {
 
 @keyframes float-drift {
   0% { transform: translate(0, 0) rotate(0deg); }
-  22% { transform: translate(7px, -10px) rotate(0.7deg); }
-  45% { transform: translate(-6px, 3px) rotate(-0.5deg); }
-  68% { transform: translate(5px, 9px) rotate(0.4deg); }
-  86% { transform: translate(-4px, -5px) rotate(-0.6deg); }
+  22% { transform: translate(12px, -17px) rotate(1.1deg); }
+  45% { transform: translate(-10px, 5px) rotate(-0.8deg); }
+  68% { transform: translate(9px, 15px) rotate(0.7deg); }
+  86% { transform: translate(-7px, -9px) rotate(-1deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
-/* A little startled shake that quickly decays to a dead stop - like the
-   drifting artwork got nudged by the cursor and settled in place. */
+/* A gentle nudge that decays slowly to a dead stop - like the drifting
+   artwork got tapped by the cursor and gradually settled in place. */
 @keyframes float-settle {
   0% { transform: translate(0, 0) rotate(0deg); }
-  20% { transform: translate(-6px, 4px) rotate(-1.6deg); }
-  40% { transform: translate(4px, -3px) rotate(1.2deg); }
-  60% { transform: translate(-2px, 2px) rotate(-0.6deg); }
-  80% { transform: translate(1px, -1px) rotate(0.25deg); }
+  15% { transform: translate(-3px, 2px) rotate(-0.7deg); }
+  35% { transform: translate(2px, -1.5px) rotate(0.5deg); }
+  55% { transform: translate(-1.2px, 1px) rotate(-0.3deg); }
+  75% { transform: translate(0.6px, -0.5px) rotate(0.15deg); }
+  90% { transform: translate(-0.2px, 0.2px) rotate(-0.05deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
