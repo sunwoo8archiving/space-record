@@ -258,7 +258,7 @@ main {
    with the image's own per-student tilt (an inline rotate() set in JS)
    instead of overwriting it - each element keeps its own transform. */
 .gallery-float {
-  animation: float-drift 11s ease-in-out infinite;
+  animation: float-drift 13s ease-in-out infinite;
 }
 
 .gallery-float.settling {
@@ -272,10 +272,10 @@ main {
 
 @keyframes float-drift {
   0% { transform: translate(0, 0) rotate(0deg); }
-  22% { transform: translate(12px, -17px) rotate(1.1deg); }
-  45% { transform: translate(-10px, 5px) rotate(-0.8deg); }
-  68% { transform: translate(9px, 15px) rotate(0.7deg); }
-  86% { transform: translate(-7px, -9px) rotate(-1deg); }
+  22% { transform: translate(24px, -34px) rotate(1.1deg); }
+  45% { transform: translate(-20px, 10px) rotate(-0.8deg); }
+  68% { transform: translate(18px, 30px) rotate(0.7deg); }
+  86% { transform: translate(-14px, -18px) rotate(-1deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 

@@ -352,7 +352,89 @@ function setupDrag() {
 // Weightless idle drift on the gallery image (see .gallery-float in
 // style.css), which stops with a little startled wobble when the cursor
 // lands on it and resumes drifting once the cursor leaves.
+//
+// The source PNGs are 1536x1024 canvases with a lot of transparent margin
+// around the actual artwork, so "the cursor is over the image element"
+// covers a much bigger area than "the cursor is over something visible" -
+// reacting to the empty margin felt wrong. alphaHitTest reads the drawn
+// image's pixels once per image load and looks up the alpha at the cursor's
+// position, so hovering only counts where the artwork is actually opaque.
+const alphaCanvas = document.createElement("canvas");
+const alphaCtx = alphaCanvas.getContext("2d", { willReadFrequently: true });
+let alphaData = null; // cached Uint8ClampedArray from getImageData, or null until ready
+
+function buildAlphaMap() {
+  alphaData = null;
+  const w = galleryImage.naturalWidth;
+  const h = galleryImage.naturalHeight;
+  if (!w || !h) return;
+  // Downscaled - this is only ever used for a coarse "is there art here"
+  // lookup, not pixel-perfect hit testing, so a small canvas keeps every
+  // mousemove lookup cheap.
+  const scale = Math.min(1, 200 / Math.max(w, h));
+  alphaCanvas.width = Math.max(1, Math.round(w * scale));
+  alphaCanvas.height = Math.max(1, Math.round(h * scale));
+  try {
+    alphaCtx.clearRect(0, 0, alphaCanvas.width, alphaCanvas.height);
+    alphaCtx.drawImage(galleryImage, 0, 0, alphaCanvas.width, alphaCanvas.height);
+    alphaData = alphaCtx.getImageData(0, 0, alphaCanvas.width, alphaCanvas.height).data;
+  } catch (err) {
+    alphaData = null; // e.g. a tainted canvas - fall back to the full box
+  }
+}
+
+// The element's own current rotation angle in degrees, read back from its
+// computed transform matrix - used because the image can be rotated twice
+// over (its own per-student tilt, nested inside the wrapper's animated
+// drift), and getComputedStyle only ever reports one element's own matrix.
+function getRotationDeg(el) {
+  const value = getComputedStyle(el).transform;
+  if (!value || value === "none") return 0;
+  const m = new DOMMatrix(value);
+  return Math.atan2(m.b, m.a) * (180 / Math.PI);
+}
+
+function isOverArtwork(clientX, clientY) {
+  // offsetWidth/Height are the element's own layout box, unaffected by any
+  // transform on it or its ancestors - since the <img> has no fixed
+  // width/height (only max-width/max-height), this box already exactly
+  // matches the rendered artwork, with no separate letterboxing to account
+  // for.
+  const renderW = galleryImage.offsetWidth;
+  const renderH = galleryImage.offsetHeight;
+  if (renderW <= 0 || renderH <= 0) return false;
+
+  // getBoundingClientRect gives the on-screen (rotated) box, but its center
+  // point is still exactly where the image's own center currently is,
+  // regardless of rotation - rotating a box about its center never moves
+  // the center.
+  const rect = galleryImage.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  // Un-rotate the cursor's offset from that center by the image's total
+  // current rotation (its own per-student tilt plus whatever angle the
+  // idle-drift animation is at right now on the wrapper), landing back in
+  // the image's own unrotated pixel grid.
+  const totalDeg = getRotationDeg(galleryFloat) + getRotationDeg(galleryImage);
+  const rad = (-totalDeg * Math.PI) / 180;
+  const dx = clientX - cx;
+  const dy = clientY - cy;
+  const localX = dx * Math.cos(rad) - dy * Math.sin(rad) + renderW / 2;
+  const localY = dx * Math.sin(rad) + dy * Math.cos(rad) + renderH / 2;
+
+  if (localX < 0 || localY < 0 || localX > renderW || localY > renderH) return false;
+  if (!alphaData) return true; // not ready yet - don't block the interaction
+
+  const px = Math.min(alphaCanvas.width - 1, Math.floor((localX / renderW) * alphaCanvas.width));
+  const py = Math.min(alphaCanvas.height - 1, Math.floor((localY / renderH) * alphaCanvas.height));
+  const alpha = alphaData[(py * alphaCanvas.width + px) * 4 + 3];
+  return alpha > 10;
+}
+
 function setupFloat() {
+  let hovering = false;
+
   const startSettle = () => {
     galleryFloat.classList.remove("settled");
     if (!galleryFloat.classList.contains("settling")) {
@@ -364,11 +446,26 @@ function setupFloat() {
     galleryFloat.classList.remove("settling", "settled");
   };
 
-  dragStage.addEventListener("mouseenter", startSettle);
-  dragStage.addEventListener("mouseleave", resumeDrift);
-  // Covers touch/pen input, which never fires mouseenter, so a drag started
-  // without hovering first still stops the drift before it moves the image.
+  const updateHover = (clientX, clientY) => {
+    const over = isOverArtwork(clientX, clientY);
+    if (over === hovering) return;
+    hovering = over;
+    if (hovering) startSettle();
+    else resumeDrift();
+  };
+
+  dragStage.addEventListener("mousemove", (e) => updateHover(e.clientX, e.clientY));
+  dragStage.addEventListener("mouseleave", () => {
+    hovering = false;
+    resumeDrift();
+  });
+  // Covers touch/pen input, which never fires mousemove before contact, so a
+  // drag started without hovering first still stops the drift before it
+  // moves the image.
   dragStage.addEventListener("pointerdown", startSettle);
+
+  galleryImage.addEventListener("load", buildAlphaMap);
+  if (galleryImage.complete) buildAlphaMap();
 
   galleryFloat.addEventListener("animationend", (e) => {
     if (e.animationName !== "float-settle") return;
