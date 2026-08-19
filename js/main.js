@@ -266,80 +266,12 @@ function setupModal() {
   });
 }
 
-function setupDrag() {
-  let startX = 0; // fixed at pointerdown, used only to detect a "click" (no real drag)
-  let baseX = 0; // rebased every time a step is consumed
-  let dragging = false;
-  const dragThreshold = 60;
-  const clickThreshold = 5;
-
-  // Crosses as many thresholds as the current pointer position allows (handles
-  // fast flicks that jump past more than one student in a single move event),
-  // rebasing baseX each time so the remaining offset is the leftover drag past
-  // the last step. Wraps around at the first/last student (19 -> 01, 01 -> 19).
-  const consumeSteps = (clientX) => {
-    let delta = clientX - baseX;
-    while (true) {
-      if (delta <= -dragThreshold) {
-        goTo((currentIndex + 1) % students.length);
-        baseX -= dragThreshold;
-      } else if (delta >= dragThreshold) {
-        goTo((currentIndex - 1 + students.length) % students.length);
-        baseX += dragThreshold;
-      } else {
-        break;
-      }
-      delta = clientX - baseX;
-    }
-    return delta;
-  };
-
-  const onDown = (e) => {
-    // Without this, starting a drag from outside the image (or over text)
-    // kicks off the browser's native text/image selection instead of our
-    // drag - the visible symptom was a blue selection highlight while
-    // trying to drag through the gallery.
-    e.preventDefault();
-    dragging = true;
-    startX = e.clientX;
-    baseX = e.clientX;
-    dragStage.classList.add("dragging");
-    dragStage.setPointerCapture(e.pointerId);
-  };
-
-  const onMove = (e) => {
-    if (!dragging) return;
-    consumeSteps(e.clientX);
-  };
-
-  const onUp = (e) => {
-    if (!dragging) return;
-    dragging = false;
-    dragStage.classList.remove("dragging");
-
-    consumeSteps(e.clientX);
-    const totalDelta = e.clientX - startX;
-
-    if (Math.abs(totalDelta) < clickThreshold) {
-      openModal(students[currentIndex]);
-    }
-  };
-
-  dragStage.addEventListener("pointerdown", onDown);
-  dragStage.addEventListener("pointermove", onMove);
-  dragStage.addEventListener("pointerup", onUp);
-  dragStage.addEventListener("pointercancel", onUp);
-
-  // Belt-and-suspenders alongside the pointerdown preventDefault and the
-  // user-select: none on .drag-stage - this cancels the browser's "start a
-  // text/image selection" action directly, regardless of which underlying
-  // event (mouse vs. pointer vs. touch) triggered it. Listens on the whole
-  // document (not just .drag-stage) because a mousedown inside a
-  // non-selectable element like <img> can make the browser anchor the
-  // selection on the nearest text it finds instead - e.g. the caption below
-  // the image - which is outside .drag-stage and wouldn't bubble through it.
-  document.addEventListener("selectstart", (e) => {
-    if (dragging) e.preventDefault();
+// Moving between students is keyboard-only now (arrow keys) - dragging used
+// to swipe between them, but that gesture is earmarked for the zoom dial
+// instead, so the image area is just a click target for the detail modal.
+function setupGalleryInteraction() {
+  dragStage.addEventListener("click", () => {
+    openModal(students[currentIndex]);
   });
 
   document.addEventListener("keydown", (e) => {
@@ -553,7 +485,7 @@ async function init() {
   revealToggle.textContent = siteRevealed ? toCipher("외계어") : "언어";
   renderMarquee();
   renderGallery();
-  setupDrag();
+  setupGalleryInteraction();
   setupFloat();
   setupNav();
   setupModal();

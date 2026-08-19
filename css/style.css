@@ -234,13 +234,8 @@ main {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  cursor: grab;
-  touch-action: pan-y;
+  cursor: pointer;
   user-select: none;
-}
-
-.drag-stage.dragging {
-  cursor: grabbing;
 }
 
 .drag-stage img {
