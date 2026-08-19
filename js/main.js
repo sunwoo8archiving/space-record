@@ -11,7 +11,6 @@ const viewerMarquee = document.getElementById("viewer-marquee");
 const viewerMarqueeTrack = document.getElementById("viewer-marquee-track");
 const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
-const galleryFloat = document.getElementById("gallery-float");
 const lensWrap = document.getElementById("lens-wrap");
 const galleryImageHalo = document.getElementById("gallery-image-halo");
 const ticksWrap = document.getElementById("ticks");
@@ -296,63 +295,6 @@ function setupGalleryInteraction() {
     if (views.gallery.hidden) return;
     if (e.key === "ArrowRight") goTo(currentIndex + 1);
     if (e.key === "ArrowLeft") goTo(currentIndex - 1);
-  });
-}
-
-// Weightless idle drift on the gallery image (see .gallery-float in
-// style.css), which stops with a little startled wobble when the cursor
-// lands on it and resumes drifting once the cursor leaves.
-//
-// The lens is now a fixed circular frame (see setupLensDial), so "hovering
-// the piece" just means being within the ring's own hit radius - no more
-// need to sample the PNG's alpha channel the way a free-floating,
-// irregularly-shaped image used to require.
-function isOverLens(clientX, clientY) {
-  const rect = lensWrap.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
-  const dx = clientX - cx;
-  const dy = clientY - cy;
-  const radius = rect.width / 2 + 42; // matches .grip-hit's outward inset
-  return dx * dx + dy * dy <= radius * radius;
-}
-
-function setupFloat() {
-  let hovering = false;
-
-  const startSettle = () => {
-    galleryFloat.classList.remove("settled");
-    if (!galleryFloat.classList.contains("settling")) {
-      galleryFloat.classList.add("settling");
-    }
-  };
-
-  const resumeDrift = () => {
-    galleryFloat.classList.remove("settling", "settled");
-  };
-
-  const updateHover = (clientX, clientY) => {
-    const over = isOverLens(clientX, clientY);
-    if (over === hovering) return;
-    hovering = over;
-    if (hovering) startSettle();
-    else resumeDrift();
-  };
-
-  dragStage.addEventListener("mousemove", (e) => updateHover(e.clientX, e.clientY));
-  dragStage.addEventListener("mouseleave", () => {
-    hovering = false;
-    resumeDrift();
-  });
-  // Covers touch/pen input, which never fires mousemove before contact, so a
-  // drag started without hovering first still stops the drift before it
-  // moves the image.
-  dragStage.addEventListener("pointerdown", startSettle);
-
-  galleryFloat.addEventListener("animationend", (e) => {
-    if (e.animationName !== "float-settle") return;
-    galleryFloat.classList.remove("settling");
-    galleryFloat.classList.add("settled");
   });
 }
 
@@ -786,7 +728,6 @@ async function init() {
   renderGallery();
   setupGalleryInteraction();
   setupLensDial();
-  setupFloat();
   setupNav();
   setupModal();
   setupViewerTabs();
