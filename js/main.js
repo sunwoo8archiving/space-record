@@ -152,8 +152,21 @@ function renderMarquee() {
   const items = students
     .map((_, i) => `<button data-index="${i}" type="button">${studentLabel(i)}</button>`)
     .join("");
-  // duplicated so wrapping the scroll position at the halfway point is seamless
-  viewerMarqueeTrack.innerHTML = items + items;
+
+  // One copy needs to be measured before we know how many copies are needed.
+  viewerMarqueeTrack.innerHTML = items;
+  const singleWidth = viewerMarqueeTrack.scrollWidth || 1;
+  const viewportWidth = viewerMarquee.clientWidth || window.innerWidth;
+
+  // Repeat enough copies that the track is always wider than one viewport's
+  // worth PLUS one full copy. Wrapping the scroll offset within a single
+  // copy's width only stays seamless if there's always at least that much
+  // real content ahead of the visible window - on a wide screen, 2 copies
+  // isn't always enough and the scroll can run past the end of the track
+  // into blank space before it wraps back to the start.
+  const copies = Math.max(2, Math.ceil(viewportWidth / singleWidth) + 1);
+  viewerMarqueeTrack.innerHTML = items.repeat(copies);
+  viewerMarqueeTrack.dataset.singleWidth = singleWidth;
 
   viewerMarqueeTrack.querySelectorAll("button").forEach((btn) => {
     btn.addEventListener("click", () => goTo(Number(btn.dataset.index)));
@@ -186,15 +199,27 @@ function setupMarqueeAnimation() {
     const dt = Math.min((timestamp - lastTime) / 1000, 0.1);
     lastTime = timestamp;
 
-    const halfWidth = viewerMarqueeTrack.scrollWidth / 2;
-    if (!paused && halfWidth > 0) {
-      offset = (offset + speed * dt) % halfWidth;
+    const singleWidth = Number(viewerMarqueeTrack.dataset.singleWidth) || 0;
+    if (!paused && singleWidth > 0) {
+      offset = (offset + speed * dt) % singleWidth;
       viewerMarqueeTrack.style.transform = `translateX(${-offset}px)`;
     }
     requestAnimationFrame(frame);
   }
 
   requestAnimationFrame(frame);
+
+  // A wider window can need more copies of the list than were built at load
+  // (see renderMarquee) - rebuild on resize so there's still always enough
+  // real content ahead of the scroll position.
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      renderMarquee();
+      renderGallery();
+    }, 200);
+  });
 }
 
 function goTo(index) {
