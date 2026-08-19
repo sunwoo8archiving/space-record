@@ -236,6 +236,7 @@ main {
   overflow: hidden;
   cursor: grab;
   touch-action: pan-y;
+  user-select: none;
 }
 
 .drag-stage.dragging {

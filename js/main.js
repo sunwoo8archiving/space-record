@@ -294,6 +294,11 @@ function setupDrag() {
   };
 
   const onDown = (e) => {
+    // Without this, starting a drag from outside the image (or over text)
+    // kicks off the browser's native text/image selection instead of our
+    // drag - the visible symptom was a blue selection highlight while
+    // trying to drag through the gallery.
+    e.preventDefault();
     dragging = true;
     startX = e.clientX;
     baseX = e.clientX;
@@ -323,6 +328,18 @@ function setupDrag() {
   dragStage.addEventListener("pointermove", onMove);
   dragStage.addEventListener("pointerup", onUp);
   dragStage.addEventListener("pointercancel", onUp);
+
+  // Belt-and-suspenders alongside the pointerdown preventDefault and the
+  // user-select: none on .drag-stage - this cancels the browser's "start a
+  // text/image selection" action directly, regardless of which underlying
+  // event (mouse vs. pointer vs. touch) triggered it. Listens on the whole
+  // document (not just .drag-stage) because a mousedown inside a
+  // non-selectable element like <img> can make the browser anchor the
+  // selection on the nearest text it finds instead - e.g. the caption below
+  // the image - which is outside .drag-stage and wouldn't bubble through it.
+  document.addEventListener("selectstart", (e) => {
+    if (dragging) e.preventDefault();
+  });
 
   document.addEventListener("keydown", (e) => {
     if (views.gallery.hidden) return;
