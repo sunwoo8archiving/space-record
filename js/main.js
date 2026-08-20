@@ -243,7 +243,8 @@ function setupMarqueeAnimation() {
 }
 
 function goTo(index) {
-  currentIndex = Math.max(0, Math.min(students.length - 1, index));
+  // Wraps instead of clamping, so ArrowRight/ArrowLeft can cross 19 <-> 01.
+  currentIndex = ((index % students.length) + students.length) % students.length;
   renderGallery();
 }
 
