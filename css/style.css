@@ -365,6 +365,18 @@ main {
     overflow-y: visible;
   }
 
+  /* At this width the two 1fr columns around the search box aren't the
+     same size - Ship/Suit's two words need more room than the single-
+     word 번역 toggle, so the "auto" search column sits flush against
+     the tabs with all the leftover space stacked up on the toggle side
+     instead. A relative offset nudges it right to balance the gap on
+     both sides without feeding back into the grid's own track sizing
+     the way a margin would (margin changes the auto column's content
+     box, which reshuffles how much space the two 1fr columns get). */
+  .site-search {
+    left: 26px;
+  }
+
   .site-search input {
     width: 110px;
     font-size: 13px;
