@@ -3,11 +3,9 @@ let currentIndex = 0;
 let currentType = "spaceship";
 
 const galleryImage = document.getElementById("gallery-image");
-const viewerStudent = document.getElementById("viewer-student");
 const viewerTabs = document.getElementById("viewer-tabs");
 const viewerMarquee = document.getElementById("viewer-marquee");
 const viewerMarqueeTrack = document.getElementById("viewer-marquee-track");
-const counter = document.getElementById("counter");
 const dragStage = document.getElementById("drag-stage");
 
 const modalOverlay = document.getElementById("modal-overlay");
@@ -105,14 +103,11 @@ function studentLabel(index) {
 }
 
 function renderGallery() {
-  const student = students[currentIndex];
   const work = getWork(currentIndex, currentType);
 
   galleryImage.src = work ? work.image : "images/placeholder.svg";
   galleryImage.alt = work ? work.title : "";
   galleryImage.style.transform = `rotate(${getRotate(work)}deg)`;
-  viewerStudent.textContent = displayText(student ? student.student : "");
-  counter.textContent = displayText(`${pad(currentIndex + 1)} / ${pad(students.length)}`);
 
   viewerTabs.querySelectorAll("button").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.type === currentType);
@@ -155,7 +150,7 @@ function renderMarquee() {
 // wrapping it with modulo never "restarts" anything, so there's no seam for
 // that bug to happen at.
 function setupMarqueeAnimation() {
-  const speed = 56; // px per second, roughly matching the old 30s per loop
+  const speed = 44; // px per second - a bit slower than the old 56
   let paused = false;
   let lastTime = null;
   let offset = 0;

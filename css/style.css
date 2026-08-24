@@ -1,3 +1,16 @@
+/* Self-hosted, not just named in the font stack - the file itself ships
+   with the site, so every visitor renders the same face regardless of
+   what's installed on their own device. One variable-font file covers
+   the whole weight range (45-920), so a single @font-face + src covers
+   every font-weight the CSS uses instead of needing one per weight. */
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/PretendardVariable.woff2") format("woff2-variations");
+}
+
 :root {
   --bg: #fff;
   --fg: #111;
@@ -16,7 +29,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: -apple-system, "Pretendard", "Noto Sans KR", sans-serif;
+  font-family: "Pretendard Variable", -apple-system, "Noto Sans KR", sans-serif;
   line-height: 1.5;
   display: flex;
   flex-direction: column;
@@ -226,17 +239,6 @@ main {
   user-select: none;
   -webkit-user-drag: none;
   display: block;
-}
-
-.viewer-caption {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.counter {
-  font-size: 13px;
-  color: var(--muted);
-  letter-spacing: 0.02em;
 }
 
 /* Lives in the header nav, in the spot the old Info button used to occupy -
