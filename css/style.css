@@ -156,7 +156,7 @@ main {
 }
 
 .viewer-tabs button {
-  font-size: 48px;
+  font-size: 20px;
   color: var(--muted);
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
@@ -246,7 +246,7 @@ main {
    same size as the other header/tab buttons (viewer-tabs, site-nav), bold
    to stand out from them. */
 .reveal-toggle {
-  font-size: 48px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--muted);
   white-space: nowrap;
@@ -386,23 +386,15 @@ main {
     width: min(280px, 90vw);
   }
 
-  /* The header's tabs/toggle are set in a big 48px face with nowrap (see
-     above) so their cipher text never wraps - fine on desktop, but at
-     48px the grid's 1fr columns can't shrink below "Ship  Suit"'s
-     unwrapped width, and it forces the search box and toggle off the
-     edge of narrow phone screens entirely. Scaling the whole header down
-     here keeps everything on one row and on-screen. */
+  /* Tighter padding/gaps at this width just to give the (already small,
+     see .viewer-tabs button/.reveal-toggle above) header a bit more
+     breathing room on narrow phone screens. */
   .site-header {
     padding: 16px 14px;
   }
 
   .viewer-tabs {
     gap: 10px;
-  }
-
-  .viewer-tabs button,
-  .reveal-toggle {
-    font-size: 20px;
   }
 
   .site-nav {
