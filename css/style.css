@@ -5,10 +5,10 @@
 
   /* Lens dial */
   --hairline: #e2ded4;
-  --ring-metal: #24242a;
-  --ring-metal-hi: #4d4d57;
-  --ring-metal-lo: #131317;
-  --ring-tick: #d8d6cf;
+  --ring-metal-dark: #3a3c40;
+  --ring-metal-light: #f1f2f4;
+  --ring-tick: rgba(24, 22, 20, 0.42);
+  --ring-tick-strong: rgba(24, 22, 20, 0.78);
   --accent: #a8763a;
   --focus-glow: rgba(168, 118, 58, 0.38);
   --stage-shadow: rgba(20, 20, 26, 0.16);
@@ -131,33 +131,9 @@ button {
   color: var(--muted);
 }
 
-.site-nav button {
-  font-size: 48px;
-  color: var(--muted);
-  padding-bottom: 4px;
-  border-bottom: 2px solid transparent;
-}
-
-.site-nav button:hover {
-  color: var(--fg);
-}
-
-.site-nav button.active {
-  color: var(--fg);
-  border-bottom-color: var(--fg);
-}
-
 main {
   flex: 1;
   position: relative;
-}
-
-.view {
-  min-height: 100%;
-}
-
-.view[hidden] {
-  display: none;
 }
 
 /* Gallery: single-image drag view */
@@ -243,8 +219,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  cursor: pointer;
+  /* No overflow:hidden - the glass halo (see .porthole-halo) is meant to
+     bleed past this box into the marquee/caption above and below it,
+     not get clipped in a straight line at the edge of the flex area. */
   user-select: none;
 }
 
@@ -300,12 +277,34 @@ main {
   will-change: transform;
 }
 
+/* Brushed steel, not flat black: a conic-gradient sweeps light and dark
+   bands all the way around the ring, the way an actual metal bezel
+   catches ambient light differently at every angle. A single linear
+   gradient can only fake one light source and reads as flat paint. */
 .barrel {
   position: absolute;
   inset: -16px;
   border-radius: 50%;
-  background: linear-gradient(155deg, var(--ring-metal-hi), var(--ring-metal) 45%, var(--ring-metal-lo));
-  box-shadow: 0 16px 36px var(--stage-shadow), inset 0 0 0 1px var(--ring-metal-lo);
+  background: conic-gradient(
+    from 200deg,
+    var(--ring-metal-dark) 0deg,
+    #c7c9ce 18deg,
+    var(--ring-metal-light) 35deg,
+    #71747a 55deg,
+    #a8abb1 80deg,
+    var(--ring-metal-dark) 105deg,
+    #dcdee1 130deg,
+    #55585e 155deg,
+    var(--ring-metal-light) 180deg,
+    #8c8f94 205deg,
+    var(--ring-metal-dark) 230deg,
+    #e8e9eb 255deg,
+    #62656a 280deg,
+    #c2c4c9 305deg,
+    var(--ring-metal-dark) 330deg,
+    #c7c9ce 360deg
+  );
+  box-shadow: 0 16px 36px var(--stage-shadow), inset 0 0 0 1px var(--ring-metal-dark);
   pointer-events: none;
 }
 
@@ -329,6 +328,9 @@ main {
   border-radius: 50%;
 }
 
+/* Ticks are a translucent dark line (not an opaque light one) so they read
+   as an engraved groove regardless of which brushed-metal band (light or
+   dark, see .barrel) happens to sit underneath. */
 .tick {
   position: absolute;
   top: 4px;
@@ -338,14 +340,12 @@ main {
   margin-left: -0.5px;
   border-radius: 1px;
   background: var(--ring-tick);
-  opacity: 0.4;
-  transition: opacity 0.15s ease, height 0.15s ease, background 0.15s ease, margin-top 0.15s ease, width 0.15s ease;
+  transition: height 0.15s ease, background 0.15s ease, margin-top 0.15s ease, width 0.15s ease;
 }
 
 /* Minor ticks can also be a click-stop when turning slowly - a smaller
    flash than the major stop's, matching its smaller base size. */
 .tick.active {
-  opacity: 1;
   height: 8px;
   margin-top: -1.5px;
   width: 1.5px;
@@ -358,7 +358,7 @@ main {
   width: 2.5px;
   height: 9px;
   margin-left: -1.25px;
-  opacity: 0.85;
+  background: var(--ring-tick-strong);
 }
 
 .tick.stop.active {
@@ -472,33 +472,23 @@ main {
   letter-spacing: 0.02em;
 }
 
+/* Lives in the header nav now, in the spot the old Info button used to
+   occupy - same size as the other header/tab buttons (viewer-tabs, the
+   old site-nav) rather than the small pill it used to be. */
 .reveal-toggle {
-  font-size: 12px;
+  font-size: 48px;
   color: var(--muted);
-  border: 1px solid var(--muted);
-  border-radius: 12px;
-  padding: 4px 14px;
-  margin-bottom: 24px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
 }
 
 .reveal-toggle:hover {
   color: var(--fg);
-  border-color: var(--fg);
 }
 
-/* Info */
-.view-info {
-  position: relative;
-  padding: 48px 32px;
-  max-width: 640px;
-}
-
-.view-close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 28px;
-  line-height: 1;
+.reveal-toggle.active {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
 }
 
 /* Detail modal */

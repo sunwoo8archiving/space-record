@@ -19,10 +19,6 @@ const porthole = document.getElementById("porthole");
 const gripHit = document.getElementById("grip-hit");
 const dustBackCanvas = document.getElementById("dust-back");
 const dustFrontCanvas = document.getElementById("dust-front");
-const views = {
-  gallery: document.getElementById("view-gallery"),
-  info: document.getElementById("view-info"),
-};
 
 const modalOverlay = document.getElementById("modal-overlay");
 const modalClose = document.getElementById("modal-close");
@@ -81,39 +77,18 @@ function escapeHtml(str) {
   return str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-function currentViewName() {
-  return Object.keys(views).find((key) => !views[key].hidden);
-}
-
-function updateNavLabels() {
-  const name = currentViewName();
-  document.querySelectorAll(".site-nav [data-view]").forEach((btn) => {
-    const isActive = btn.dataset.view === name;
-    btn.classList.toggle("active", isActive);
-    btn.textContent = displayText(isActive ? "Close" : btn.dataset.label);
-  });
-}
-
-function showView(name) {
-  Object.entries(views).forEach(([key, el]) => {
-    el.hidden = key !== name;
-  });
-  updateNavLabels();
-  if (name === "gallery") renderGallery();
-}
-
 // Re-derives every visible piece of text on the page from the current
 // siteRevealed state. The reveal-toggle button's own label is the one
 // exception - it stays legible always, since it's the key to the puzzle.
 function applyRevealState() {
   applyCipherStatic();
   searchInput.placeholder = displayText("Search");
-  updateNavLabels();
   renderGallery();
   renderMarquee();
   renderModalText();
   if (searchInput.value.trim()) runSearch(searchInput.value);
   revealToggle.textContent = siteRevealed ? toCipher("외계어") : "언어";
+  revealToggle.classList.toggle("active", siteRevealed);
 }
 
 function setupRevealToggle() {
@@ -293,7 +268,6 @@ function setupModal() {
 // (see setupLensDial's pan handler, which opens it on an undragged click).
 function setupGalleryInteraction() {
   document.addEventListener("keydown", (e) => {
-    if (views.gallery.hidden) return;
     if (e.key === "ArrowRight") goTo(currentIndex + 1);
     if (e.key === "ArrowLeft") goTo(currentIndex - 1);
   });
@@ -414,6 +388,10 @@ function setupLensDial() {
   }
 
   function onRingDown(e) {
+    // Without this, dragging around the ring starts a native text/image
+    // selection instead - the same blue-highlight issue the pan handler
+    // below already guards against.
+    e.preventDefault();
     ringDragging = true;
     try {
       gripHit.setPointerCapture(e.pointerId);
@@ -515,9 +493,10 @@ function setupLensDial() {
   porthole.addEventListener("pointerup", onPanUp);
   porthole.addEventListener("pointercancel", onPanUp);
   // Same fix as the rest of the gallery's drag surfaces - without this,
-  // dragging across the image starts a native text/image selection.
+  // dragging across the image (or around the ring) starts a native
+  // text/image selection.
   document.addEventListener("selectstart", (e) => {
-    if (panDragging) e.preventDefault();
+    if (panDragging || ringDragging) e.preventDefault();
   });
 
   function renderLoop() {
@@ -684,7 +663,6 @@ function runSearch(query) {
   searchResults.querySelectorAll("button[data-index]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const index = Number(btn.dataset.index);
-      showView("gallery");
       goTo(index);
       openModal(students[index]);
       searchResults.hidden = true;
@@ -708,34 +686,22 @@ function setupSearch() {
   });
 }
 
-function setupNav() {
-  document.querySelectorAll("[data-view]").forEach((el) => {
-    el.addEventListener("click", () => {
-      const target = el.dataset.view;
-      // clicking the nav button for the view already showing returns to gallery
-      showView(!views[target].hidden ? "gallery" : target);
-    });
-  });
-  document.getElementById("info-close").addEventListener("click", () => showView("gallery"));
-}
-
 async function init() {
   const res = await fetch("data/works.json", { cache: "no-store" });
   students = await res.json();
   applyCipherStatic();
   searchInput.placeholder = displayText("Search");
   revealToggle.textContent = siteRevealed ? toCipher("외계어") : "언어";
+  revealToggle.classList.toggle("active", siteRevealed);
   renderMarquee();
   renderGallery();
   setupGalleryInteraction();
   setupLensDial();
-  setupNav();
   setupModal();
   setupViewerTabs();
   setupSearch();
   setupRevealToggle();
   setupMarqueeAnimation();
-  showView("gallery");
 }
 
 init();
