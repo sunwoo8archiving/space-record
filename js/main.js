@@ -162,15 +162,16 @@ function renderMarquee() {
 // that bug to happen at.
 function setupMarqueeAnimation() {
   const speed = 44; // px per second - a bit slower than the old 56
-  let paused = false;
+  let targetSpeed = speed;
+  let currentSpeed = speed;
   let lastTime = null;
   let offset = 0;
 
   viewerMarquee.addEventListener("mouseenter", () => {
-    paused = true;
+    targetSpeed = 0;
   });
   viewerMarquee.addEventListener("mouseleave", () => {
-    paused = false;
+    targetSpeed = speed;
   });
 
   function frame(timestamp) {
@@ -180,9 +181,14 @@ function setupMarqueeAnimation() {
     const dt = Math.min((timestamp - lastTime) / 1000, 0.1);
     lastTime = timestamp;
 
+    // Ease toward the target speed (0 while hovering, full speed once the
+    // cursor leaves) instead of an instant stop/start, so it winds down and
+    // spins back up smoothly rather than snapping.
+    currentSpeed += (targetSpeed - currentSpeed) * Math.min(1, dt * 4);
+
     const singleWidth = Number(viewerMarqueeTrack.dataset.singleWidth) || 0;
-    if (!paused && singleWidth > 0) {
-      offset = (offset + speed * dt) % singleWidth;
+    if (singleWidth > 0 && Math.abs(currentSpeed) > 0.01) {
+      offset = (offset + currentSpeed * dt + singleWidth) % singleWidth;
       viewerMarqueeTrack.style.transform = `translateX(${-offset}px)`;
     }
     requestAnimationFrame(frame);
