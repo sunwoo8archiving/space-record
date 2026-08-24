@@ -340,7 +340,16 @@ main {
     overflow-y: auto;
   }
 
+  /* .modal-images/.modal-text are placed with grid-column:1/2 for the
+     desktop two-column layout - switching .modal itself to one column
+     above isn't enough on its own, since those two explicit placements
+     are still in effect. Without this, .modal-text lands in an implicit
+     second column that the single 1fr track can't feed any width into,
+     collapsing both it and the image column to 0 (bug found testing at
+     375px: images rendered at 0x0 and the text never appeared at all). */
   .modal-images {
+    grid-row: 1;
+    grid-column: 1;
     height: auto;
   }
 
@@ -350,6 +359,8 @@ main {
   }
 
   .modal-text {
+    grid-row: 2;
+    grid-column: 1;
     height: auto;
     overflow-y: visible;
   }
@@ -361,5 +372,28 @@ main {
 
   .search-results {
     width: min(280px, 90vw);
+  }
+
+  /* The header's tabs/toggle are set in a big 48px face with nowrap (see
+     above) so their cipher text never wraps - fine on desktop, but at
+     48px the grid's 1fr columns can't shrink below "Ship  Suit"'s
+     unwrapped width, and it forces the search box and toggle off the
+     edge of narrow phone screens entirely. Scaling the whole header down
+     here keeps everything on one row and on-screen. */
+  .site-header {
+    padding: 16px 14px;
+  }
+
+  .viewer-tabs {
+    gap: 10px;
+  }
+
+  .viewer-tabs button,
+  .reveal-toggle {
+    font-size: 20px;
+  }
+
+  .site-nav {
+    gap: 10px;
   }
 }
