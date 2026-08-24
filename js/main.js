@@ -34,8 +34,16 @@ const CIPHER_SYMBOLS = Array.from("ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚻᛁᛃᛇᛈᛉ
 let modalPlainText = "";
 let siteRevealed = false; // global: false = whole site shows as cipher text
 
+// Shifts every character's symbol lookup by the same random amount, so the
+// mapping is still consistent across the whole page for as long as this
+// value doesn't change (everything reads as one coherent "script"), but
+// re-rolling it makes the exact same text come out looking different -
+// randomized once at load, then again on every toggle (see
+// setupRevealToggle) so it's a fresh cipher each time you flip into it.
+let cipherOffset = Math.floor(Math.random() * CIPHER_SYMBOLS.length);
+
 function toCipher(text) {
-  return text.replace(/\S/g, (ch) => CIPHER_SYMBOLS[ch.codePointAt(0) % CIPHER_SYMBOLS.length]);
+  return text.replace(/\S/g, (ch) => CIPHER_SYMBOLS[(ch.codePointAt(0) + cipherOffset) % CIPHER_SYMBOLS.length]);
 }
 
 // Every piece of visible text should route through this so one toggle covers
@@ -84,6 +92,7 @@ function applyRevealState() {
 function setupRevealToggle() {
   revealToggle.addEventListener("click", () => {
     siteRevealed = !siteRevealed;
+    cipherOffset = Math.floor(Math.random() * CIPHER_SYMBOLS.length);
     applyRevealState();
   });
 }
