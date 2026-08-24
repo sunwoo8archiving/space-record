@@ -156,7 +156,7 @@ main {
 }
 
 .viewer-tabs button {
-  font-size: 20px;
+  font-size: 26px;
   color: var(--muted);
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
@@ -246,7 +246,7 @@ main {
    same size as the other header/tab buttons (viewer-tabs, site-nav), bold
    to stand out from them. */
 .reveal-toggle {
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--muted);
   white-space: nowrap;
