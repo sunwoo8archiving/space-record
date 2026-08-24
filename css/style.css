@@ -285,25 +285,30 @@ main {
   position: absolute;
   inset: -16px;
   border-radius: 50%;
-  background: conic-gradient(
-    from 200deg,
-    var(--ring-metal-dark) 0deg,
-    #c7c9ce 18deg,
-    var(--ring-metal-light) 35deg,
-    #71747a 55deg,
-    #a8abb1 80deg,
-    var(--ring-metal-dark) 105deg,
-    #dcdee1 130deg,
-    #55585e 155deg,
-    var(--ring-metal-light) 180deg,
-    #8c8f94 205deg,
-    var(--ring-metal-dark) 230deg,
-    #e8e9eb 255deg,
-    #62656a 280deg,
-    #c2c4c9 305deg,
-    var(--ring-metal-dark) 330deg,
-    #c7c9ce 360deg
-  );
+  /* Horizontal brushed-steel streaks (like a hairline-finish plate with a
+     circular cutout) rather than a sweep around the ring - a fine
+     repeating-linear-gradient for the actual brush grain, layered over a
+     broader horizontal sheen for the overall rounded, light-catching look. */
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.07) 0px,
+      rgba(0, 0, 0, 0.07) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(
+      90deg,
+      var(--ring-metal-dark) 0%,
+      #c7c9ce 13%,
+      var(--ring-metal-light) 26%,
+      #71747a 40%,
+      #a8abb1 52%,
+      var(--ring-metal-dark) 63%,
+      #dcdee1 75%,
+      #8c8f94 87%,
+      var(--ring-metal-dark) 100%
+    );
   box-shadow: 0 16px 36px var(--stage-shadow), inset 0 0 0 1px var(--ring-metal-dark);
   pointer-events: none;
 }
@@ -398,6 +403,21 @@ main {
   margin-left: -1.5px;
   background: var(--accent);
   border-radius: 2px;
+}
+
+/* A small ring at the handle's outer tip - like a pull-loop - so the
+   indicator reads as something to grip and turn, not just a pointer. */
+.indicator::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
 }
 
 .porthole {
