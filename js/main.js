@@ -18,6 +18,7 @@ const siteSearch = document.getElementById("site-search");
 const searchInput = document.getElementById("search-input");
 const searchResults = document.getElementById("search-results");
 const revealToggle = document.getElementById("reveal-toggle");
+const revealToggleLabel = document.getElementById("reveal-toggle-label");
 
 // Runes + hanja, purely decorative - each character deterministically maps to
 // one of these so the "cipher" always reads the same way, like a secret script.
@@ -75,8 +76,9 @@ function applyRevealState() {
   renderMarquee();
   renderModalText();
   if (searchInput.value.trim()) runSearch(searchInput.value);
-  revealToggle.textContent = siteRevealed ? toCipher("외계어") : "언어";
+  revealToggleLabel.textContent = siteRevealed ? toCipher("외계어") : "언어";
   revealToggle.classList.toggle("active", siteRevealed);
+  revealToggle.setAttribute("aria-checked", String(siteRevealed));
 }
 
 function setupRevealToggle() {
@@ -377,8 +379,9 @@ async function init() {
   students = await res.json();
   applyCipherStatic();
   searchInput.placeholder = displayText("Search");
-  revealToggle.textContent = siteRevealed ? toCipher("외계어") : "언어";
+  revealToggleLabel.textContent = siteRevealed ? toCipher("외계어") : "언어";
   revealToggle.classList.toggle("active", siteRevealed);
+  revealToggle.setAttribute("aria-checked", String(siteRevealed));
   renderMarquee();
   renderGallery();
   setupDrag();
