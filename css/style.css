@@ -2,16 +2,6 @@
   --bg: #fff;
   --fg: #111;
   --muted: #666;
-
-  /* Lens dial */
-  --hairline: #e2ded4;
-  --ring-metal-dark: #3a3c40;
-  --ring-metal-light: #f1f2f4;
-  --ring-tick: rgba(24, 22, 20, 0.42);
-  --ring-tick-strong: rgba(24, 22, 20, 0.78);
-  --accent: #a8763a;
-  --focus-glow: rgba(168, 118, 58, 0.38);
-  --stage-shadow: rgba(20, 20, 26, 0.16);
 }
 
 * {
@@ -219,266 +209,23 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* No overflow:hidden - the glass halo (see .porthole-halo) is meant to
-     bleed past this box into the marquee/caption above and below it,
-     not get clipped in a straight line at the edge of the flex area. */
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
   user-select: none;
+}
+
+.drag-stage.dragging {
+  cursor: grabbing;
 }
 
 .drag-stage img {
+  max-width: 70vw;
+  max-height: 70vh;
+  object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
   display: block;
-}
-
-/* Lens dial: a magnifying-glass "porthole" replacing the plain image. The
-   ring around the edge is a drag-to-turn dial (zoom, with click-stops);
-   the glass itself is a separate drag surface (pan). See js/main.js
-   setupLensDial() for the interaction logic. */
-.lens-wrap {
-  position: relative;
-  width: min(60vw, 66vh, 560px);
-  aspect-ratio: 1 / 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  touch-action: none;
-}
-
-/* Glass halo: a second, heavily blurred copy of the same artwork at the
-   same pan/zoom, sitting further out than the barrel. Where it overlaps
-   the barrel it's hidden underneath it (comes first in the DOM, so it
-   paints below); past the barrel's outer edge it peeks out on its own,
-   fading to nothing at its own rim - the part of the image that "spills
-   past the dial" instead of just being clipped away. */
-.porthole-halo {
-  position: absolute;
-  inset: -200px;
-  pointer-events: none;
-  /* No border-radius/overflow clip and an "ellipse farthest-side" mask
-     (not "circle") - the haze reaches into the box's corners instead of
-     being cropped to a second, bigger circle around the lens. Both
-     gradients finish fading to fully transparent by 82% of the box, well
-     short of its own 100% edge, so there's a wide dead buffer and no
-     straight cutoff line where the box itself ends. */
-  background: radial-gradient(ellipse farthest-side, transparent 34%, rgba(255, 255, 255, 0.62) 52%, transparent 82%);
-  -webkit-mask-image: radial-gradient(ellipse farthest-side, transparent 0%, transparent 34%, black 52%, transparent 82%);
-  mask-image: radial-gradient(ellipse farthest-side, transparent 0%, transparent 34%, black 52%, transparent 82%);
-}
-
-.porthole-halo img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 132%;
-  max-width: none;
-  transform: translate(-50%, -50%) scale(1);
-  filter: blur(9px) saturate(1.15) brightness(1.04) contrast(0.96);
-  will-change: transform;
-}
-
-/* Brushed steel, not flat black: a conic-gradient sweeps light and dark
-   bands all the way around the ring, the way an actual metal bezel
-   catches ambient light differently at every angle. A single linear
-   gradient can only fake one light source and reads as flat paint. */
-.barrel {
-  position: absolute;
-  inset: -16px;
-  border-radius: 50%;
-  /* Horizontal brushed-steel streaks (like a hairline-finish plate with a
-     circular cutout) rather than a sweep around the ring - a fine
-     repeating-linear-gradient for the actual brush grain, layered over a
-     broader horizontal sheen for the overall rounded, light-catching look. */
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.07) 0px,
-      rgba(0, 0, 0, 0.07) 1px,
-      transparent 1px,
-      transparent 3px
-    ),
-    linear-gradient(
-      90deg,
-      var(--ring-metal-dark) 0%,
-      #c7c9ce 13%,
-      var(--ring-metal-light) 26%,
-      #71747a 40%,
-      #a8abb1 52%,
-      var(--ring-metal-dark) 63%,
-      #dcdee1 75%,
-      #8c8f94 87%,
-      var(--ring-metal-dark) 100%
-    );
-  box-shadow: 0 16px 36px var(--stage-shadow), inset 0 0 0 1px var(--ring-metal-dark);
-  pointer-events: none;
-}
-
-/* Clock-style ticks: a bold bar at every click-stop, shorter/thinner
-   marks in between that the dial passes through but never rests on
-   unless it's turned slowly (see setupLensDial). Each tick lives in its
-   own inset:0 "slot" so rotating the slot always pivots around the
-   ring's true center at any responsive size - same trick as
-   .indicator-rotor below. Ticks are light-on-dark since the barrel
-   itself is a dark graphite gradient. */
-.ticks {
-  position: absolute;
-  inset: -16px;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.tick-slot {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-}
-
-/* Ticks are a translucent dark line (not an opaque light one) so they read
-   as an engraved groove regardless of which brushed-metal band (light or
-   dark, see .barrel) happens to sit underneath. */
-.tick {
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  width: 1px;
-  height: 5px;
-  margin-left: -0.5px;
-  border-radius: 1px;
-  background: var(--ring-tick);
-  transition: height 0.15s ease, background 0.15s ease, margin-top 0.15s ease, width 0.15s ease;
-}
-
-/* Minor ticks can also be a click-stop when turning slowly - a smaller
-   flash than the major stop's, matching its smaller base size. */
-.tick.active {
-  height: 8px;
-  margin-top: -1.5px;
-  width: 1.5px;
-  margin-left: -0.75px;
-  background: var(--accent);
-}
-
-.tick.stop {
-  top: 2px;
-  width: 2.5px;
-  height: 9px;
-  margin-left: -1.25px;
-  background: var(--ring-tick-strong);
-}
-
-.tick.stop.active {
-  opacity: 1;
-  height: 13px;
-  margin-top: -2px;
-  width: 3px;
-  margin-left: -1.5px;
-  background: var(--accent);
-}
-
-.grip-hit {
-  position: absolute;
-  inset: -42px;
-  border-radius: 50%;
-  cursor: grab;
-}
-
-.grip-hit:active {
-  cursor: grabbing;
-}
-
-.indicator-rotor {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  transition: transform 0.14s cubic-bezier(0.3, 1.4, 0.4, 1);
-}
-
-.indicator {
-  position: absolute;
-  top: -34px;
-  left: 50%;
-  width: 3px;
-  height: 12px;
-  margin-left: -1.5px;
-  background: var(--accent);
-  border-radius: 2px;
-}
-
-/* A small ring at the handle's outer tip - like a pull-loop - so the
-   indicator reads as something to grip and turn, not just a pointer. */
-.indicator::before {
-  content: "";
-  position: absolute;
-  top: -7px;
-  left: 50%;
-  width: 8px;
-  height: 8px;
-  margin-left: -4px;
-  border: 1.5px solid var(--accent);
-  border-radius: 50%;
-  background: var(--bg);
-}
-
-.porthole {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--bg);
-  box-shadow: inset 0 0 0 1px var(--hairline);
-  z-index: 1;
-  cursor: grab;
-}
-
-.porthole.panning {
-  cursor: grabbing;
-}
-
-.porthole img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 132%;
-  max-width: none;
-  object-fit: unset;
-  transform: translate(-50%, -50%) scale(1);
-  user-select: none;
-  -webkit-user-drag: none;
-  will-change: transform;
-}
-
-/* .dust-back has no z-index (auto) so it paints below the plain
-   img#gallery-image in DOM order; .dust-front gets an explicit z-index to
-   sit above both, giving the dust a sense of depth around the artwork
-   instead of sitting entirely on one flat layer. */
-.dust-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.dust-canvas.dust-front {
-  z-index: 2;
-}
-
-.focus-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  box-shadow: 0 0 0 0 var(--focus-glow);
-  opacity: 0;
-  transition: opacity 0.5s ease, box-shadow 0.5s ease;
-  z-index: 3;
-}
-
-.porthole.focusing .focus-ring {
-  opacity: 1;
-  box-shadow: inset 0 0 26px 4px var(--focus-glow);
 }
 
 .viewer-caption {
@@ -492,9 +239,8 @@ main {
   letter-spacing: 0.02em;
 }
 
-/* Lives in the header nav now, in the spot the old Info button used to
-   occupy - same size as the other header/tab buttons (viewer-tabs, the
-   old site-nav) rather than the small pill it used to be. */
+/* Lives in the header nav, in the spot the old Info button used to occupy -
+   same size as the other header/tab buttons (viewer-tabs, site-nav). */
 .reveal-toggle {
   font-size: 48px;
   color: var(--muted);
