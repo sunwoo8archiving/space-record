@@ -76,7 +76,7 @@ function applyRevealState() {
   renderMarquee();
   renderModalText();
   if (searchInput.value.trim()) runSearch(searchInput.value);
-  revealToggleLabel.textContent = siteRevealed ? toCipher("외계어") : "언어";
+  revealToggleLabel.textContent = siteRevealed ? toCipher("외계어") : "번역";
   revealToggle.classList.toggle("active", siteRevealed);
   revealToggle.setAttribute("aria-checked", String(siteRevealed));
 }
@@ -379,7 +379,7 @@ async function init() {
   students = await res.json();
   applyCipherStatic();
   searchInput.placeholder = displayText("Search");
-  revealToggleLabel.textContent = siteRevealed ? toCipher("외계어") : "언어";
+  revealToggleLabel.textContent = siteRevealed ? toCipher("외계어") : "번역";
   revealToggle.classList.toggle("active", siteRevealed);
   revealToggle.setAttribute("aria-checked", String(siteRevealed));
   renderMarquee();

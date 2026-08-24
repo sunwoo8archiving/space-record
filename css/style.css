@@ -242,15 +242,11 @@ main {
 }
 
 /* Lives in the header nav, in the spot the old Info button used to occupy -
-   same size as the other header/tab buttons (viewer-tabs, site-nav). The
-   underline is a real switch track+thumb now (not just a static line), so
-   it reads as "this toggles a state" rather than "this is another tab". */
+   same size as the other header/tab buttons (viewer-tabs, site-nav), bold
+   to stand out from them. */
 .reveal-toggle {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
   font-size: 48px;
+  font-weight: 700;
   color: var(--muted);
 }
 
@@ -260,43 +256,6 @@ main {
 
 .reveal-toggle.active {
   color: var(--fg);
-}
-
-.reveal-toggle-track {
-  position: relative;
-  width: 34px;
-  height: 16px;
-  border-radius: 999px;
-  border: 1.5px solid var(--muted);
-  transition: border-color 0.2s ease;
-}
-
-.reveal-toggle:hover .reveal-toggle-track {
-  border-color: var(--fg);
-}
-
-.reveal-toggle.active .reveal-toggle-track {
-  border-color: var(--fg);
-}
-
-.reveal-toggle-thumb {
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--muted);
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.reveal-toggle:hover .reveal-toggle-thumb {
-  background: var(--fg);
-}
-
-.reveal-toggle.active .reveal-toggle-thumb {
-  background: var(--fg);
-  transform: translateX(22px);
 }
 
 /* Detail modal */
