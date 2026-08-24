@@ -160,6 +160,7 @@ main {
   color: var(--muted);
   padding-bottom: 4px;
   border-bottom: 2px solid transparent;
+  white-space: nowrap;
 }
 
 .viewer-tabs button.active {
@@ -248,6 +249,7 @@ main {
   font-size: 48px;
   font-weight: 700;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .reveal-toggle:hover {
