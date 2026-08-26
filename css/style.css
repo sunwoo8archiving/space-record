@@ -349,6 +349,15 @@ main {
 @media (max-width: 720px) {
   .modal {
     grid-template-columns: 1fr;
+    /* Desktop still declares grid-template-rows: minmax(0, 1fr) for its
+       single row. Left in place, that explicit row keeps competing with
+       row 2 (grid-auto-rows below) for the container's fixed height -
+       and since row 2's content (the full unclipped essay text) can
+       demand far more height than the modal has, row 1 (the images)
+       gets squeezed to 0 and the image visually overflows on top of the
+       text instead of pushing it down. Clearing it lets both rows size
+       to their own content (max-content), stacked normally. */
+    grid-template-rows: none;
     grid-auto-rows: max-content;
     align-items: start;
     height: 100%;
