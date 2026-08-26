@@ -20,17 +20,34 @@ const searchResults = document.getElementById("search-results");
 const revealToggle = document.getElementById("reveal-toggle");
 const revealToggleLabel = document.getElementById("reveal-toggle-label");
 
-// Runes + hanja, purely decorative - each character deterministically maps to
-// one of these so the "cipher" always reads the same way, like a secret script.
-// Hieroglyphs live outside the Basic Multilingual Plane, so each one is 2
-// UTF-16 code units - built from real, contiguously-assigned code points
-// (U+13000 onward) and split with Array.from so indexing lands on whole
-// characters instead of stray surrogate halves.
-const HIEROGLYPHS = Array.from({ length: 8 }, (_, i) => String.fromCodePoint(0x13000 + i)).join("");
-// Deliberately obscure hanja (not everyday-use characters) so the cipher
-// isn't easy to half-read at a glance.
-const HANJA = "饕餮狻猊魍魎蛟鵬曦翳黝矍彧昶玥奭龘";
-const CIPHER_SYMBOLS = Array.from("ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚻᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛝᛞᛟ" + HANJA + HIEROGLYPHS);
+// Purely decorative - each character deterministically maps to one of these
+// so the "cipher" always reads the same way, like a secret script. One
+// character from each of 15 different scripts/symbol categories (Greek,
+// Phoenician, Latin, Arabic, Hangul, Hanja, math notation, music notation,
+// currency, Kannada, cuneiform, Odia, Braille, misc symbols, Egyptian
+// hieroglyphs). Where a script actually has a character for "hour/time"
+// (as in 시/時, 시간) that one was used instead of an arbitrary pick; the
+// rest keep a plain, safe example from that script. Built with
+// String.fromCodePoint (not string literals) for the ones outside the
+// Basic Multilingual Plane, so each stays one whole character instead of a
+// stray surrogate half.
+const CIPHER_SYMBOLS = [
+  "τ", // Greek tau - the standard symbol for a time constant
+  String.fromCodePoint(0x1090e), // Phoenician (no time-related letter - plain example)
+  "H", // Latin - "hour"
+  "س", // Arabic seen - first letter of سَاعَة (sa'a), "hour"
+  "시", // Hangul 시
+  "時", // Hanja 時 - "hour/time"
+  "′", // prime - denotes minutes of time
+  String.fromCodePoint(0x1d110), // musical fermata - holds a note's duration
+  "€", // currency (no time-related symbol - plain example)
+  String.fromCodePoint(0x0ca5), // Kannada (plain example)
+  String.fromCodePoint(0x1209f), // cuneiform (plain example)
+  String.fromCodePoint(0x0b08), // Odia (plain example)
+  "⠎", // Braille "s" (dots 2-3-4) - reads like 시(si)
+  "⌚", // watch
+  String.fromCodePoint(0x13068), // Egyptian hieroglyph (plain example)
+];
 let modalPlainText = "";
 let siteRevealed = false; // global: false = whole site shows as cipher text
 
