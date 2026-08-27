@@ -11,18 +11,17 @@
   src: url("../fonts/PretendardVariable.woff2") format("woff2-variations");
 }
 
-/* Myeongjo (Korean serif) for the modal body text only - Noto Serif KR,
-   Regular weight, self-hosted the same way as Pretendard above. Trimmed
-   from Google's ~24MB variable source down to this one Regular-weight
-   file (1.2MB) covering Hangul syllables/jamo, Latin, and punctuation -
-   the modal's actual student text never uses hanja, so that (much
-   larger) block was left out. */
+/* Myeongjo (Korean serif) for the modal body text only - KoPub Batang
+   Light, self-hosted the same way as Pretendard above. Subset from the
+   original ~6.5MB TTF down to this one file (~390KB) covering Hangul
+   syllables/jamo, Latin, and punctuation - the modal's actual student
+   text never uses hanja, so that (much larger) block was left out. */
 @font-face {
-  font-family: "Noto Serif KR";
-  font-weight: 400;
+  font-family: "KoPub Batang";
+  font-weight: 300;
   font-style: normal;
   font-display: swap;
-  src: url("../fonts/NotoSerifKR-Regular.woff2") format("woff2");
+  src: url("../fonts/KoPubBatang-Light.woff2") format("woff2");
 }
 
 :root {
@@ -336,7 +335,8 @@ main {
   min-height: 0;
   overflow-y: auto;
   white-space: pre-line;
-  font-family: "Noto Serif KR", "Pretendard Variable", serif;
+  font-family: "KoPub Batang", "Pretendard Variable", serif;
+  font-weight: 300;
   font-size: 14px;
   padding-right: 8px;
   transition: letter-spacing 0.15s ease;
