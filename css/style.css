@@ -338,6 +338,7 @@ main {
   font-family: "KoPub Batang", "Pretendard Variable", serif;
   font-weight: 300;
   font-size: 14px;
+  line-height: 1.6;
   padding-right: 8px;
   transition: letter-spacing 0.15s ease;
 }
