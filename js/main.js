@@ -1,6 +1,7 @@
 let students = [];
 let currentIndex = 0;
 let currentType = "spaceship";
+let modalStudent = null; // the student currently shown in the modal, if any
 
 const galleryImage = document.getElementById("gallery-image");
 const viewerTabs = document.getElementById("viewer-tabs");
@@ -72,6 +73,31 @@ function renderModalText() {
   modalText.classList.toggle("encoded", !siteRevealed);
 }
 
+// Easter egg: while the site is in cipher (not revealed) state, swap a
+// work's normal image for one of its sketches, if it has any. Picked fresh
+// every time this runs (a fresh random pick each time cipher state is
+// (re)entered - opening the modal, or toggling 번역 off again) rather than
+// once and cached, so a work with several sketches (like student 6's pool
+// of 7) cycles through a different one each time instead of always landing
+// on the same one.
+function pickModalImageSrc(work) {
+  if (!work) return "images/placeholder.svg";
+  if (!siteRevealed && work.sketches && work.sketches.length > 0) {
+    return work.sketches[Math.floor(Math.random() * work.sketches.length)];
+  }
+  return work.image;
+}
+
+function renderModalImages() {
+  if (!modalStudent) return;
+  const spaceship = modalStudent.spaceship;
+  const spacesuit = modalStudent.spacesuit;
+  modalImage1.src = pickModalImageSrc(spaceship);
+  modalImage1.alt = "우주선";
+  modalImage2.src = pickModalImageSrc(spacesuit);
+  modalImage2.alt = "우주복";
+}
+
 // Static HTML text (marked with [data-cipher]) - stash the real text once,
 // then re-derive the displayed text from that stash every time state flips.
 function applyCipherStatic() {
@@ -98,6 +124,10 @@ function applyRevealState() {
   renderGallery();
   renderMarquee();
   renderModalText();
+  // Only while the modal is actually open and visible - otherwise this
+  // would burn a random sketch pick (see pickModalImageSrc) that nobody
+  // sees and that openModal immediately overwrites next time anyway.
+  if (!modalOverlay.hidden) renderModalImages();
   if (searchInput.value.trim()) runSearch(searchInput.value);
   revealToggleLabel.textContent = siteRevealed ? toCipher("외계어") : "번역";
   revealToggle.classList.toggle("active", siteRevealed);
@@ -123,7 +153,11 @@ function getRotate(work) {
 
 function studentLabel(index) {
   const student = students[index];
-  const name = student ? student.student : "";
+  if (!student) return displayText(pad(index + 1));
+  // Prefer the number each student picked for themselves over an arbitrary
+  // array position, once they've actually submitted one.
+  if (student.number) return displayText(student.number);
+  const name = student.student;
   const label = name && name !== "학생 이름 입력" ? name : pad(index + 1);
   return displayText(label);
 }
@@ -243,12 +277,8 @@ function setupViewerTabs() {
 
 function openModal(student) {
   if (!student) return;
-  const spaceship = student.spaceship;
-  const spacesuit = student.spacesuit;
-  modalImage1.src = spaceship ? spaceship.image : "images/placeholder.svg";
-  modalImage1.alt = "우주선";
-  modalImage2.src = spacesuit ? spacesuit.image : "images/placeholder.svg";
-  modalImage2.alt = "우주복";
+  modalStudent = student;
+  renderModalImages();
   modalPlainText = student.text || "";
   renderModalText();
   modalOverlay.hidden = false;

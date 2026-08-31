@@ -5,3 +5,9 @@ node_modules/
 # Full Pretendard font package (~67MB, every weight/format) - only the one
 # variable woff2 the site actually uses is copied into fonts/ and tracked.
 Pretendard-1.3.9/
+
+# Raw student submissions (interview docx/pdf, full ship/suit/sketch photos,
+# ~57MB) - the text is extracted into data/works.json and the images are
+# copied into images/ under their own naming scheme, so only those derived
+# copies need to be tracked.
+source/
