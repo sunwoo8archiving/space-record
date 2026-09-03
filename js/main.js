@@ -375,11 +375,42 @@ function setupDrag() {
   });
 }
 
-function findSnippet(text, query) {
-  const idx = text.toLowerCase().indexOf(query.toLowerCase());
-  if (idx === -1) return null;
-  const start = Math.max(0, idx - 20);
-  const end = Math.min(text.length, idx + query.length + 20);
+// Fuzzy, typo-tolerant match instead of an all-or-nothing substring filter:
+// an exact hit still wins (scored highest, at 2x per character so it always
+// outranks a fuzzy one), but even a query that never appears verbatim - one
+// swapped/missing letter - still turns up the closest-matching spot in the
+// text, scored by how many of the query's characters (as a multiset, so
+// repeats count correctly) show up in a same-sized window there. That means
+// a single shared character is enough to appear in the results at all;
+// sorting by score afterward is what keeps the list meaningfully ranked
+// instead of one big flat match-everything dump.
+function matchText(text, query) {
+  const t = text.toLowerCase();
+  const q = query.toLowerCase();
+
+  const exactIndex = t.indexOf(q);
+  if (exactIndex !== -1) return { score: q.length * 2, index: exactIndex };
+
+  const qCounts = {};
+  for (const ch of q) qCounts[ch] = (qCounts[ch] || 0) + 1;
+
+  const windowLen = q.length + 2; // a little slack for an inserted/dropped character
+  let best = null;
+  for (let i = 0; i < t.length; i++) {
+    const windowCounts = {};
+    for (let j = i; j < Math.min(i + windowLen, t.length); j++) {
+      windowCounts[t[j]] = (windowCounts[t[j]] || 0) + 1;
+    }
+    let overlap = 0;
+    for (const ch in qCounts) overlap += Math.min(qCounts[ch], windowCounts[ch] || 0);
+    if (overlap > 0 && (!best || overlap > best.score)) best = { score: overlap, index: i };
+  }
+  return best;
+}
+
+function snippetAround(text, index, matchLength) {
+  const start = Math.max(0, index - 20);
+  const end = Math.min(text.length, index + matchLength + 20);
   return (start > 0 ? "…" : "") + text.slice(start, end) + (end < text.length ? "…" : "");
 }
 
@@ -392,8 +423,12 @@ function runSearch(query) {
   }
 
   const matches = students
-    .map((s, i) => ({ index: i, snippet: findSnippet(s.text || "", q) }))
-    .filter((m) => m.snippet !== null);
+    .map((s, i) => {
+      const m = matchText(s.text || "", q);
+      return m ? { index: i, score: m.score, snippet: snippetAround(s.text || "", m.index, q.length) } : null;
+    })
+    .filter((m) => m !== null)
+    .sort((a, b) => b.score - a.score);
 
   searchResults.innerHTML = matches.length
     ? matches
