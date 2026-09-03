@@ -7,15 +7,15 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/6.png",
+      "image": "images/spaceship/6.webp",
       "sketches": [
-        "images/sketch/6-1.png",
-        "images/sketch/6-2.png",
-        "images/sketch/6-3.png",
-        "images/sketch/6-4.png",
-        "images/sketch/6-5.png",
-        "images/sketch/6-6.png",
-        "images/sketch/6-7.png"
+        "images/sketch/6-1.webp",
+        "images/sketch/6-2.webp",
+        "images/sketch/6-3.webp",
+        "images/sketch/6-4.webp",
+        "images/sketch/6-5.webp",
+        "images/sketch/6-6.webp",
+        "images/sketch/6-7.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -24,15 +24,15 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/6.png",
+      "image": "images/spacesuit/6.webp",
       "sketches": [
-        "images/sketch/6-1.png",
-        "images/sketch/6-2.png",
-        "images/sketch/6-3.png",
-        "images/sketch/6-4.png",
-        "images/sketch/6-5.png",
-        "images/sketch/6-6.png",
-        "images/sketch/6-7.png"
+        "images/sketch/6-1.webp",
+        "images/sketch/6-2.webp",
+        "images/sketch/6-3.webp",
+        "images/sketch/6-4.webp",
+        "images/sketch/6-5.webp",
+        "images/sketch/6-6.webp",
+        "images/sketch/6-7.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -47,9 +47,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/7.png",
+      "image": "images/spaceship/7.webp",
       "sketches": [
-        "images/sketch/7-ship.jpg"
+        "images/sketch/7-ship.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -58,9 +58,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/7.png",
+      "image": "images/spacesuit/7.webp",
       "sketches": [
-        "images/sketch/7-suit.jpg"
+        "images/sketch/7-suit.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -75,9 +75,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/10.png",
+      "image": "images/spaceship/10.webp",
       "sketches": [
-        "images/sketch/10-ship.jpg"
+        "images/sketch/10-ship.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -86,9 +86,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/10.png",
+      "image": "images/spacesuit/10.webp",
       "sketches": [
-        "images/sketch/10-suit.jpg"
+        "images/sketch/10-suit.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -103,9 +103,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/25.png",
+      "image": "images/spaceship/25.webp",
       "sketches": [
-        "images/sketch/25.jpg"
+        "images/sketch/25.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -114,9 +114,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/25.png",
+      "image": "images/spacesuit/25.webp",
       "sketches": [
-        "images/sketch/25.jpg"
+        "images/sketch/25.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -131,9 +131,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/38.png",
+      "image": "images/spaceship/38.webp",
       "sketches": [
-        "images/sketch/38-ship.jpg"
+        "images/sketch/38-ship.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -142,9 +142,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/38.png",
+      "image": "images/spacesuit/38.webp",
       "sketches": [
-        "images/sketch/38-suit.jpg"
+        "images/sketch/38-suit.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -159,9 +159,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/47.png",
+      "image": "images/spaceship/47.webp",
       "sketches": [
-        "images/sketch/47-ship.jpg"
+        "images/sketch/47-ship.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -170,9 +170,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/47.png",
+      "image": "images/spacesuit/47.webp",
       "sketches": [
-        "images/sketch/47-suit.jpg"
+        "images/sketch/47-suit.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -187,7 +187,7 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/56.png",
+      "image": "images/spaceship/56.webp",
       "sketches": [],
       "rotate": 0,
       "submitted": true
@@ -196,7 +196,7 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/56.png",
+      "image": "images/spacesuit/56.webp",
       "sketches": [],
       "rotate": 0,
       "submitted": true
@@ -211,9 +211,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/4.png",
+      "image": "images/spaceship/4.webp",
       "sketches": [
-        "images/sketch/4-ship.jpg"
+        "images/sketch/4-ship.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -222,9 +222,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/4.png",
+      "image": "images/spacesuit/4.webp",
       "sketches": [
-        "images/sketch/4-suit.jpg"
+        "images/sketch/4-suit.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -239,9 +239,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/91.png",
+      "image": "images/spaceship/91.webp",
       "sketches": [
-        "images/sketch/91-ship.jpg"
+        "images/sketch/91-ship.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -250,9 +250,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/91.png",
+      "image": "images/spacesuit/91.webp",
       "sketches": [
-        "images/sketch/91-suit.jpg"
+        "images/sketch/91-suit.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -267,9 +267,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spaceship/99.png",
+      "image": "images/spaceship/99.webp",
       "sketches": [
-        "images/sketch/99-ship.jpg"
+        "images/sketch/99-ship.webp"
       ],
       "rotate": 0,
       "submitted": true
@@ -278,9 +278,9 @@
       "title": "Untitled",
       "year": "2026",
       "medium": "",
-      "image": "images/spacesuit/99.png",
+      "image": "images/spacesuit/99.webp",
       "sketches": [
-        "images/sketch/99-suit.jpg"
+        "images/sketch/99-suit.webp"
       ],
       "rotate": 0,
       "submitted": true
