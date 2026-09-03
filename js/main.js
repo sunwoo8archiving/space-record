@@ -414,6 +414,21 @@ function snippetAround(text, index, matchLength) {
   return (start > 0 ? "…" : "") + text.slice(start, end) + (end < text.length ? "…" : "");
 }
 
+// The interview text is the "인터뷰" title, then alternating question/answer
+// paragraphs (joined with blank lines - see the extraction that built
+// data/works.json). Every student was asked the same fixed 21 questions, so
+// searching the questions too would match every student equally on whatever
+// wording the template happens to share with the query, drowning out actual
+// differences between students' own answers. Stripping the numbered
+// question paragraphs (and the title) before matching keeps search scoped
+// to what each student actually wrote.
+function answersOnly(text) {
+  return text
+    .split(/\n\n+/)
+    .filter((p) => p.trim() !== "인터뷰" && !/^\d+\.\s/.test(p.trim()))
+    .join("\n\n");
+}
+
 function runSearch(query) {
   const q = query.trim();
   if (!q) {
@@ -424,8 +439,9 @@ function runSearch(query) {
 
   const matches = students
     .map((s, i) => {
-      const m = matchText(s.text || "", q);
-      return m ? { index: i, score: m.score, snippet: snippetAround(s.text || "", m.index, q.length) } : null;
+      const answers = answersOnly(s.text || "");
+      const m = matchText(answers, q);
+      return m ? { index: i, score: m.score, snippet: snippetAround(answers, m.index, q.length) } : null;
     })
     .filter((m) => m !== null)
     .sort((a, b) => b.score - a.score);
