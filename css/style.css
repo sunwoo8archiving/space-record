@@ -24,6 +24,17 @@
   src: url("../fonts/KoPubBatang-Light.woff2") format("woff2");
 }
 
+/* Real bold face for the interview questions (see .modal-text strong) -
+   subset from KoPub Batang Bold the same way as the Light weight above,
+   instead of leaving the browser to synthesize (fake) bold from Light. */
+@font-face {
+  font-family: "KoPub Batang";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/KoPubBatang-Bold.woff2") format("woff2");
+}
+
 :root {
   --bg: #fff;
   --fg: #111;
