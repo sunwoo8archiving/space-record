@@ -361,9 +361,14 @@ main {
 
 /* One paragraph per question+answer block (see parseInterview/
    renderModalText in main.js) - the gap between blocks that used to be a
-   blank line in the plain-text version is a margin here instead. */
+   blank line in the plain-text version is a margin here instead. A first-
+   line indent (rather than only the blank-line gap) is the usual way a
+   printed book marks "a new paragraph starts here" - text-indent only
+   touches a block's first line, so it lands on the question and leaves
+   the answer's own line breaks flush left underneath it. */
 .modal-text p {
   margin: 0 0 1.4em;
+  text-indent: 1em;
 }
 
 .modal-text p:last-child {
