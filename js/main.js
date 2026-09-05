@@ -95,11 +95,18 @@ function parseInterview(text) {
 }
 
 function renderModalText() {
+  // Question and answer are now two separate <p>s (rather than one <p>
+  // with a line break between them) so the book-style first-line indent -
+  // see .modal-text p.a - can land on the answer specifically instead of
+  // the question. "block-end" carries the gap before the next Q&A pair,
+  // on whichever paragraph is actually last in this block (the answer
+  // normally, but the question itself when there wasn't one).
   modalText.innerHTML = parseInterview(modalPlainText)
     .map((b) => {
-      const question = escapeHtml(displayText(b.question));
-      const answer = b.answer ? escapeHtml(displayText(b.answer)) : "";
-      return `<p><strong>${question}</strong>${answer ? "\n" + answer : ""}</p>`;
+      const question = `<p class="q"><strong>${escapeHtml(displayText(b.question))}</strong></p>`;
+      if (!b.answer) return question.replace('class="q"', 'class="q block-end"');
+      const answer = `<p class="a block-end">${escapeHtml(displayText(b.answer))}</p>`;
+      return question + answer;
     })
     .join("");
   modalText.classList.toggle("encoded", !siteRevealed);
