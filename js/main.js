@@ -73,11 +73,11 @@ function displayText(text) {
 // question, gap, answer, gap, next question, gap, answer... with no visual
 // difference between "this is the answer to that question" and "this is a
 // new question", especially since every interview shares the same 21
-// questions. Drops the title, then joins each question directly to its
-// answer (no gap) and puts the gap back only between one Q&A pair and the
-// next, so the blank lines mark actual section breaks instead of every
-// paragraph boundary.
-function formatInterviewText(text) {
+// questions. Drops the title and groups the rest into {question, answer}
+// blocks (answer is "" if that one was left unanswered) so renderModalText
+// can lay each block out - and style the question - as its own unit
+// instead of one flat run of text.
+function parseInterview(text) {
   const paras = text.split(/\n\n+/).filter((p) => p.trim() !== "인터뷰");
   const blocks = [];
   let current = null;
@@ -85,17 +85,23 @@ function formatInterviewText(text) {
     const isQuestion = /^\d+\.\s/.test(p.trim());
     if (isQuestion || current === null) {
       if (current !== null) blocks.push(current);
-      current = p;
+      current = { question: p, answer: "" };
     } else {
-      current += "\n" + p;
+      current.answer = current.answer ? current.answer + "\n" + p : p;
     }
   }
   if (current !== null) blocks.push(current);
-  return blocks.join("\n\n");
+  return blocks;
 }
 
 function renderModalText() {
-  modalText.textContent = displayText(formatInterviewText(modalPlainText));
+  modalText.innerHTML = parseInterview(modalPlainText)
+    .map((b) => {
+      const question = escapeHtml(displayText(b.question));
+      const answer = b.answer ? escapeHtml(displayText(b.answer)) : "";
+      return `<p><strong>${question}</strong>${answer ? "\n" + answer : ""}</p>`;
+    })
+    .join("");
   modalText.classList.toggle("encoded", !siteRevealed);
 }
 

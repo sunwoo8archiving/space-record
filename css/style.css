@@ -335,6 +335,7 @@ main {
   min-height: 0;
   overflow-y: auto;
   white-space: pre-line;
+  text-align: justify;
   font-family: "KoPub Batang", "Pretendard Variable", serif;
   font-weight: 300;
   font-size: 14px;
@@ -345,6 +346,21 @@ main {
 
 .modal-text.encoded {
   letter-spacing: 0.12em;
+}
+
+/* One paragraph per question+answer block (see parseInterview/
+   renderModalText in main.js) - the gap between blocks that used to be a
+   blank line in the plain-text version is a margin here instead. */
+.modal-text p {
+  margin: 0 0 1.4em;
+}
+
+.modal-text p:last-child {
+  margin-bottom: 0;
+}
+
+.modal-text strong {
+  font-weight: 700;
 }
 
 @media (max-width: 720px) {
