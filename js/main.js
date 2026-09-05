@@ -68,8 +68,34 @@ function displayText(text) {
   return siteRevealed ? text : toCipher(text);
 }
 
+// The stored text is the "인터뷰" title, then alternating question/answer
+// paragraphs all separated by the same blank line - which reads as
+// question, gap, answer, gap, next question, gap, answer... with no visual
+// difference between "this is the answer to that question" and "this is a
+// new question", especially since every interview shares the same 21
+// questions. Drops the title, then joins each question directly to its
+// answer (no gap) and puts the gap back only between one Q&A pair and the
+// next, so the blank lines mark actual section breaks instead of every
+// paragraph boundary.
+function formatInterviewText(text) {
+  const paras = text.split(/\n\n+/).filter((p) => p.trim() !== "인터뷰");
+  const blocks = [];
+  let current = null;
+  for (const p of paras) {
+    const isQuestion = /^\d+\.\s/.test(p.trim());
+    if (isQuestion || current === null) {
+      if (current !== null) blocks.push(current);
+      current = p;
+    } else {
+      current += "\n" + p;
+    }
+  }
+  if (current !== null) blocks.push(current);
+  return blocks.join("\n\n");
+}
+
 function renderModalText() {
-  modalText.textContent = displayText(modalPlainText);
+  modalText.textContent = displayText(formatInterviewText(modalPlainText));
   modalText.classList.toggle("encoded", !siteRevealed);
 }
 
